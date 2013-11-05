@@ -1,0 +1,22 @@
+## Yii
+assets/
+.idea/
+avatars/
+images/
+protected/runtime/
+protected/vendors/
+
+## custom YY
+*.zip
+*.rar
+*.tar
+*.gz
+*.gzip
+*.pdf
+*.jpg
+*.png
+*.gif
+*.psd
+*.db
+*.log
+
