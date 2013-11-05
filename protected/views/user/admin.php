@@ -42,8 +42,8 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php
-$locale = 'ru';
-$dateFormat = 'yy-mm-dd';
+/*$locale = 'ru';
+$dateFormat = 'yy-mm-dd';*/
 
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'user-grid',

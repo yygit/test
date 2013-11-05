@@ -80,7 +80,7 @@ class User extends CActiveRecord{
             'pass' => 'Pass',
             'passCompare' => 'passCompare',
             'type' => 'Type',
-            'date_entered' => 'Date Entered',
+            'date_entered' => 'Date Registered',
         );
     }
 
