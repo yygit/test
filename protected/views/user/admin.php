@@ -41,24 +41,55 @@ $('.search-form form').submit(function(){
     )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php
+$locale = 'ru';
+$dateFormat = 'yy-mm-dd';
+
+$this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'user-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
+    'afterAjaxUpdate' => 'reinstallDatePicker',
     'columns' => array(
         'id',
         'username',
         'email',
 //		'pass',
         array(
+            'header' => $model->getAttributeLabel('type'),
             'value' => 'ucfirst($data->type)',
             'filter' => CHtml::dropDownList('User[type]',
                 $model->type, array('public' => 'Public', 'author' => 'Author', 'admin' => 'Admin'),
                 array('empty' => '(Select)')),
         ),
-        'date_entered',
+        array(
+            'header' => $model->getAttributeLabel('date_entered'),
+            'value' => 'ucfirst($data->date_entered)',
+            'filter' => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                    'attribute' => 'date_entered',
+                    'model' => $model,
+                    'language' => $locale,
+                    'htmlOptions' => array(
+                        'id' => 'datepicker_for_due_date',
+                    ),
+                    'options' => array(
+                        'dateFormat' => $dateFormat,
+                    ),
+                ),
+                true),
+        ),
         array(
             'class' => 'CButtonColumn',
         ),
     ),
-)); ?>
+));
+
+Yii::app()->clientScript->registerScript('reinstalldatepicker', "
+    function reinstallDatePicker(id, data) {
+        $.datepicker.setDefaults($.datepicker.regional['$locale']);
+        $('#datepicker_for_due_date').datepicker({
+            'dateFormat': '$dateFormat'
+        });
+    }
+");
+?>
