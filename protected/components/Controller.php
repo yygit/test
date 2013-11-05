@@ -27,7 +27,6 @@ class Controller extends CController	{
 			$error['message'] = 'wrong browser';
 			$this->render('//site/error', $error);
 			return false;
-			// return true;
 		}
 		else
 			return true;

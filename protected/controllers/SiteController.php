@@ -9,7 +9,7 @@ class SiteController extends Controller{
     }
 
     public function accessRules() {
-        $_action = 'login2';    // allow this action to ADMIN only, allow other actions to everyone
+        $_action = 'login2'; // allow this action to ADMIN only, allow other actions to everyone
         return array(
             array('allow',
                 'actions' => array($_action),
@@ -17,7 +17,7 @@ class SiteController extends Controller{
             ),
             array('allow',
                 'users' => array('*'),
-                'expression'=>"Yii::app()->controller->action->id!=='$_action'",
+                'expression' => "Yii::app()->controller->action->id!=='$_action'",
             ),
             array('deny',
                 'users' => array('*'),
@@ -125,5 +125,18 @@ class SiteController extends Controller{
     public function actionLogout() {
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
+    }
+
+    public function actionAccordion() {
+        $this->render('accordion', array('model' => null));
+    }
+
+    public function actionTabs() {
+        $this->render('tabs', array('model' => null));
+    }
+
+    public function actionDatepicker() {
+        $model = User::model()->find(); // find one
+        $this->render('datepicker', array('model' => $model));
     }
 }

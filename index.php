@@ -1,5 +1,4 @@
 <?php
-
 // change the following paths if necessary
 //$yii=dirname(__FILE__).'/../yii/framework/yii.php';					// Yii ver. 1.1.7
 $yii=dirname(__FILE__).'/../stargame/www/framework/yii.php'; 			// Yii ver. 1.1.13
@@ -20,4 +19,4 @@ Yii::import("application.components.EZendAutoloader", true);
 Yii::registerAutoloader(array('EZendAutoloader','loadClass'), true);  
  */
   
-$app->run();  
+$app->run();
