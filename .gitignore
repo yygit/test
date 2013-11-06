@@ -1,10 +1,11 @@
 ## Yii
-assets/
+## assets/
 .idea/
 avatars/
 images/
-protected/runtime/
-protected/vendors/
+## protected/runtime/
+## protected/vendors/
+protected/extensions/bootstrap/
 
 ## custom YY
 *.zip

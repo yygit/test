@@ -5,6 +5,7 @@ class SiteController extends Controller{
     public function filters() {
         return array(
             'accessControl', // perform access control for CRUD operations
+            array('ext.bootstrap.filters.BootstrapFilter + page'),
         );
     }
 
@@ -45,6 +46,7 @@ class SiteController extends Controller{
             // They can be accessed via: index.php?r=site/page&view=FileName
             'page' => array(
                 'class' => 'CViewAction',
+                'layout' => 'bootstrap',
             ),
         );
     }
