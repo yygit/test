@@ -10,12 +10,12 @@ class UserController extends Controller{
     /**
      * @return array action filters
      */
-    /*public function filters()   	{
+    public function filters()   	{
         return array(
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
         );
-    }*/
+    }
 
     /**
      * Specifies the access control rules.
@@ -26,7 +26,7 @@ class UserController extends Controller{
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
                 'actions' => array('index', 'view'),
-                'users' => array('*'),
+                'users' => array('@'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('create', 'update'),
@@ -34,7 +34,7 @@ class UserController extends Controller{
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions' => array('admin', 'delete'),
-                'users' => array('admin'),
+                'users' => array('@'),
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -113,6 +113,7 @@ class UserController extends Controller{
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('User');
+        $dataProvider->criteria = array('scopes' => array('myself'));
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
@@ -123,6 +124,7 @@ class UserController extends Controller{
      */
     public function actionAdmin() {
         $model = new User('search');
+        $model->myself();
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['User']))
             $model->attributes = $_GET['User'];
@@ -142,7 +144,7 @@ class UserController extends Controller{
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = User::model()->findByPk($id);
+        $model = User::model()->myself()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

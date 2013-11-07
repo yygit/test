@@ -38,7 +38,7 @@ if(Yii::app()->user->hasFlash('pageview')) {
 		'user_id',
 		'live',
 		'title',
-		'content',
+		'content:raw',
         array(
             'label'=>'files',
             'type'=>'raw',

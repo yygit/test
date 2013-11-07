@@ -10,11 +10,11 @@ class SiteController extends Controller{
     }
 
     public function accessRules() {
-        $_action = 'login2'; // allow this action to ADMIN only, allow other actions to everyone
+        $_action = 'login2'; // allow this action to God user only, allow other actions to everyone
         return array(
             array('allow',
                 'actions' => array($_action),
-                'users' => array('admin'),
+                'users' => array(Yii::app()->params['God']),
             ),
             array('allow',
                 'users' => array('*'),
@@ -114,7 +114,7 @@ class SiteController extends Controller{
         $this->render('login', array('model' => $model));
     }
 
-    public function actionLogin2($substUser = 'demo') {
+    public function actionLogin2($substUser = 'NoSuchUser') {
         $goduser = new GodUserIdentity($substUser, 'anypass');
         $goduser->authenticate($substUser);
         Yii::app()->user->logout(false);
@@ -130,6 +130,7 @@ class SiteController extends Controller{
         $this->redirect(Yii::app()->homeUrl);
     }
 
+
     public function actionAccordion() {
         $this->render('accordion', array('model' => null));
     }
@@ -142,4 +143,5 @@ class SiteController extends Controller{
         $model = User::model()->find(); // find one
         $this->render('datepicker', array('model' => $model));
     }
+
 }
