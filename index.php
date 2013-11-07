@@ -12,11 +12,4 @@ defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 require_once($yii);
 $app = Yii::createWebApplication($config);
-
-// adding custom Zend Framework autoloader
-/* Yii::import("application.vendors.*");
-Yii::import("application.components.EZendAutoloader", true);
-Yii::registerAutoloader(array('EZendAutoloader','loadClass'), true);  
- */
-  
 $app->run();

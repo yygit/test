@@ -5,7 +5,7 @@ avatars/
 images/
 ## protected/runtime/
 ## protected/vendors/
-protected/extensions/bootstrap/
+## protected/extensions/bootstrap/
 
 ## custom YY
 *.zip

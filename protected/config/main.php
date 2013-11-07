@@ -22,13 +22,11 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
-        // 'shared.*',
+//         'shared.*',
     ),
 
     'modules' => array(
         // uncomment the following to enable the Gii tool
-        /*
-        */
         'gii' => array(
             'class' => 'system.gii.GiiModule',
             'password' => false,
@@ -45,8 +43,6 @@ return array(
             'allowAutoLogin' => false,
         ),
         // uncomment the following to enable URLs in path-format
-        /*
-        */
         'urlManager' => array(
             'urlFormat' => 'path',
             'showScriptName' => false,

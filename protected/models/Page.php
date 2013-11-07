@@ -44,11 +44,13 @@ class Page extends CActiveRecord{
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('user_id, title, date_updated', 'required'),
+//            array('user_id, title, date_updated', 'required'),
+            array('user_id, title', 'required'),
             array('live', 'numerical', 'integerOnly' => true),
             array('user_id', 'length', 'max' => 10),
             array('title', 'length', 'max' => 100),
-            array('content, date_published', 'safe'),
+//            array('content, date_published', 'safe'),
+            array('content', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, user_id, username, live, title, content, date_updated, date_published', 'safe', 'on' => 'search'),
@@ -128,12 +130,22 @@ class Page extends CActiveRecord{
     }*/
 
     public function init() {
-//        $this->attachEventHandler('onBeforeValidate', array($this,'_assignUID'));
+        $this->attachEventHandler('onBeforeValidate', array($this, '_assignUID'));
     }
 
     protected function _assignUID($event) {
         if ($this->IsNewRecord) {
             $this->user_id = Yii::app()->user->id;
         }
+    }
+
+    public function behaviors() {
+        return array(
+            'CTimestampBehavior' => array(
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'date_published',
+                'updateAttribute' => null, // updates in DB
+            )
+        );
     }
 }

@@ -77,6 +77,7 @@ class SiteController extends Controller{
      * Displays the contact page
      */
     public function actionContact() {
+//        $this->layout = 'bootstrap';
         $model = new ContactForm;
         if (isset($_POST['ContactForm'])) {
             $model->attributes = $_POST['ContactForm'];
@@ -114,9 +115,9 @@ class SiteController extends Controller{
     }
 
     public function actionLogin2($substUser = 'demo') {
-        Yii::app()->user->logout(false);
         $goduser = new GodUserIdentity($substUser, 'anypass');
         $goduser->authenticate($substUser);
+        Yii::app()->user->logout(false);
         $loginstatus = Yii::app()->user->login($goduser);
         var_dump($loginstatus);
     }

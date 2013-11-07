@@ -122,12 +122,12 @@ class User extends CActiveRecord{
 //        }
     }
 
-    public function defaultScope() {
+    /*public function defaultScope() {
         if (empty(Yii::app()->user->id) OR empty(Yii::app()->user->name) OR Yii::app()->user->name === Yii::app()->params['God']) {
             return array();
         }
         return array(
             'condition' => 'id=' . Yii::app()->user->id,
         );
-    }
+    }*/
 }

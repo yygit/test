@@ -39,17 +39,17 @@
 		<?php echo $form->error($model,'content'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'date_updated'); ?>
-		<?php echo $form->textField($model,'date_updated'); ?>
-		<?php echo $form->error($model,'date_updated'); ?>
+	<!--<div class="row">
+		<?php /*echo $form->labelEx($model,'date_updated'); */?>
+		<?php /*echo $form->textField($model,'date_updated'); */?>
+		<?php /*echo $form->error($model,'date_updated'); */?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'date_published'); ?>
-		<?php echo $form->textField($model,'date_published'); ?>
-		<?php echo $form->error($model,'date_published'); ?>
-	</div>
+		<?php /*echo $form->labelEx($model,'date_published'); */?>
+		<?php /*echo $form->textField($model,'date_published'); */?>
+		<?php /*echo $form->error($model,'date_published'); */?>
+	</div>-->
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
