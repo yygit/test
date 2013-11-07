@@ -1,16 +1,14 @@
 <?php
-/* @var $this PageController */
-/* @var $model Page */
 
 $this->breadcrumbs = array(
-    'Pages' => array('index'),
-    'Manage',
+	$model->label(2) => array('index'),
+	Yii::t('app', 'Manage'),
 );
 
 $this->menu = array(
-    array('label' => 'List Page', 'url' => array('index')),
-    array('label' => 'Create Page', 'url' => array('create')),
-);
+		array('label'=>Yii::t('app', 'List') . ' ' . $model->label(2), 'url'=>array('index')),
+		array('label'=>Yii::t('app', 'Create') . ' ' . $model->label(), 'url'=>array('create')),
+	);
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -18,7 +16,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#page-grid').yiiGridView('update', {
+	$.fn.yiiGridView.update('page-grid', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -26,50 +24,39 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Pages</h1>
+<h1><?php echo Yii::t('app', 'Manage') . ' ' . GxHtml::encode($model->label(2)); ?></h1>
 
 <p>
-    You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
-        &lt;&gt;</b>
-    or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+You may optionally enter a comparison operator (&lt;, &lt;=, &gt;, &gt;=, &lt;&gt; or =) at the beginning of each of your search values to specify how the comparison should be done.
 </p>
 
-<?php echo CHtml::link('Advanced Search', '#', array('class' => 'search-button')); ?>
-<div class="search-form" style="display:none">
-    <?php $this->renderPartial('_search', array(
-        'model' => $model,
-    )); ?>
+<?php echo GxHtml::link(Yii::t('app', 'Advanced Search'), '#', array('class' => 'search-button')); ?>
+<div class="search-form">
+<?php $this->renderPartial('_search', array(
+	'model' => $model,
+)); ?>
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'page-grid',
-    'dataProvider' => $model->search(),
-    'filter' => $model,
-    'columns' => array(
-        'id',
-        'user_id',
-//        'user.username',
-        array(
-            'header' => 'Author',
-//            'name' => 'user_id',
-            'name' => 'username',
-            'value' => '$data->user->username'
-        ),
-        array(
-            'header' => 'Live?',
-            'value' => '($data->live == 1) ? "Live" : "Draft"',
-            'filter' => CHtml::dropDownList('Page[live]',
-                $model->live, array('1' => 'Live',
-                    '0' => 'Draft'), array('empty' => '(select)'))
-        ),
-        'title',
-//		'content',
-        'date_updated',
-        /*
-        'date_published',
-        */
-        array(
-            'class' => 'CButtonColumn',
-        ),
-    ),
+	'id' => 'page-grid',
+	'dataProvider' => $model->search(),
+	'filter' => $model,
+	'columns' => array(
+		'id',
+		array(
+				'name'=>'user_id',
+				'value'=>'GxHtml::valueEx($data->user)',
+				'filter'=>GxHtml::listDataEx(User::model()->findAllAttributes(null, true)),
+				),
+		'live',
+		'title',
+		'content',
+		'date_updated',
+		/*
+		'date_published',
+		*/
+		array(
+			'class' => 'CButtonColumn',
+		),
+	),
 )); ?>

@@ -1,42 +1,26 @@
-<?php
-/* @var $this PageController */
-/* @var $data Page */
-?>
-
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('id')); ?>:
+	<?php echo GxHtml::link(GxHtml::encode($data->id), array('view', 'id' => $data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('user_id')); ?>:</b>
-	<?php echo CHtml::encode($data->user_id); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('user_id')); ?>:
+		<?php echo GxHtml::encode(GxHtml::valueEx($data->user)); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('live')); ?>:</b>
-	<?php echo CHtml::encode($data->live); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('live')); ?>:
+	<?php echo GxHtml::encode($data->live); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('title')); ?>:</b>
-	<?php echo CHtml::encode($data->title); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('title')); ?>:
+	<?php echo GxHtml::encode($data->title); ?>
 	<br />
-
-
-    <!--<b><?php /*// echo CHtml::encode($data->getAttributeLabel('content')); */?>:</b>
-    <?php /*// echo CHtml::encode($data->content); */?>
-    <br />-->
-
-    <b><?php echo CHtml::encode($data->getAttributeLabel('fnames')); ?>:</b>
-    <?php echo CHtml::encode($this->printNames($data,'files','name')); ?>
-    <br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('date_updated')); ?>:</b>
-	<?php echo CHtml::encode($data->date_updated); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('content')); ?>:
+	<?php echo GxHtml::encode($data->content); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('date_published')); ?>:</b>
-	<?php echo CHtml::encode($data->date_published); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('date_updated')); ?>:
+	<?php echo GxHtml::encode($data->date_updated); ?>
 	<br />
-
+	<?php echo GxHtml::encode($data->getAttributeLabel('date_published')); ?>:
+	<?php echo GxHtml::encode($data->date_published); ?>
+	<br />
 
 </div>

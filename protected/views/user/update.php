@@ -1,24 +1,22 @@
 <?php
-/* @var $this UserController */
-/* @var $model User */
 
-$this->breadcrumbs=array(
-	'Users'=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	'Update',
+$this->breadcrumbs = array(
+	$model->label(2) => array('index'),
+	GxHtml::valueEx($model) => array('view', 'id' => GxActiveRecord::extractPkValue($model, true)),
+	Yii::t('app', 'Update'),
 );
 
-$this->menu=array(
-	array('label'=>'List User', 'url'=>array('index')),
-	array('label'=>'Create User', 'url'=>array('create')),
-	array('label'=>'View User', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage User', 'url'=>array('admin')),
+$this->menu = array(
+	array('label' => Yii::t('app', 'List') . ' ' . $model->label(2), 'url'=>array('index')),
+	array('label' => Yii::t('app', 'Create') . ' ' . $model->label(), 'url'=>array('create')),
+	array('label' => Yii::t('app', 'View') . ' ' . $model->label(), 'url'=>array('view', 'id' => GxActiveRecord::extractPkValue($model, true))),
+	array('label' => Yii::t('app', 'Manage') . ' ' . $model->label(2), 'url'=>array('admin')),
 );
 ?>
 
-<h1>Update User <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('app', 'Update') . ' ' . GxHtml::encode($model->label()) . ' ' . GxHtml::encode(GxHtml::valueEx($model)); ?></h1>
 
 <?php
-//    var_dump($model->attributes);
+$this->renderPartial('_form', array(
+		'model' => $model));
 ?>
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

@@ -1,21 +1,22 @@
 <?php
-/* @var $this FileController */
-/* @var $model File */
 
-$this->breadcrumbs=array(
-	'Files'=>array('index'),
-	$model->name=>array('view','id'=>$model->id),
-	'Update',
+$this->breadcrumbs = array(
+	$model->label(2) => array('index'),
+	GxHtml::valueEx($model) => array('view', 'id' => GxActiveRecord::extractPkValue($model, true)),
+	Yii::t('app', 'Update'),
 );
 
-$this->menu=array(
-	array('label'=>'List File', 'url'=>array('index')),
-	array('label'=>'Create File', 'url'=>array('create')),
-	array('label'=>'View File', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage File', 'url'=>array('admin')),
+$this->menu = array(
+	array('label' => Yii::t('app', 'List') . ' ' . $model->label(2), 'url'=>array('index')),
+	array('label' => Yii::t('app', 'Create') . ' ' . $model->label(), 'url'=>array('create')),
+	array('label' => Yii::t('app', 'View') . ' ' . $model->label(), 'url'=>array('view', 'id' => GxActiveRecord::extractPkValue($model, true))),
+	array('label' => Yii::t('app', 'Manage') . ' ' . $model->label(2), 'url'=>array('admin')),
 );
 ?>
 
-<h1>Update File <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('app', 'Update') . ' ' . GxHtml::encode($model->label()) . ' ' . GxHtml::encode(GxHtml::valueEx($model)); ?></h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php
+$this->renderPartial('_form', array(
+		'model' => $model));
+?>

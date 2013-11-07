@@ -1,30 +1,20 @@
-<?php
-/* @var $this CommentController */
-/* @var $data Comment */
-?>
-
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('id')); ?>:
+	<?php echo GxHtml::link(GxHtml::encode($data->id), array('view', 'id' => $data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('user_id')); ?>:</b>
-	<?php echo CHtml::encode($data->user_id); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('user_id')); ?>:
+		<?php echo GxHtml::encode(GxHtml::valueEx($data->user)); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('page_id')); ?>:</b>
-	<?php echo CHtml::encode($data->page_id); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('page_id')); ?>:
+		<?php echo GxHtml::encode(GxHtml::valueEx($data->page)); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('comment')); ?>:</b>
-	<?php // echo CHtml::encode($data->comment); ?>
-	<?php echo ($data->comment); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('comment')); ?>:
+	<?php echo GxHtml::encode($data->comment); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('date_entered')); ?>:</b>
-	<?php echo CHtml::encode($data->date_entered); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('date_entered')); ?>:
+	<?php echo GxHtml::encode($data->date_entered); ?>
 	<br />
-
 
 </div>

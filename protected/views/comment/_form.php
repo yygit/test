@@ -1,48 +1,42 @@
-<?php
-/* @var $this CommentController */
-/* @var $model Comment */
-/* @var $form CActiveForm */
-?>
-
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'comment-form',
-	'enableAjaxValidation'=>false,
-)); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+<?php $form = $this->beginWidget('GxActiveForm', array(
+	'id' => 'comment-form',
+	'enableAjaxValidation' => false,
+));
+?>
+
+	<p class="note">
+		<?php echo Yii::t('app', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('app', 'are required'); ?>.
+	</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
+		<div class="row">
 		<?php echo $form->labelEx($model,'user_id'); ?>
-		<?php echo $form->textField($model,'user_id',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->dropDownList($model, 'user_id', GxHtml::listDataEx(User::model()->findAllAttributes(null, true))); ?>
 		<?php echo $form->error($model,'user_id'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'page_id'); ?>
-		<?php echo $form->textField($model,'page_id',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->dropDownList($model, 'page_id', GxHtml::listDataEx(Page::model()->findAllAttributes(null, true))); ?>
 		<?php echo $form->error($model,'page_id'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'comment'); ?>
-		<?php echo $form->textArea($model,'comment',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textArea($model, 'comment'); ?>
 		<?php echo $form->error($model,'comment'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'date_entered'); ?>
-		<?php echo $form->textField($model,'date_entered'); ?>
+		<?php echo $form->textField($model, 'date_entered'); ?>
 		<?php echo $form->error($model,'date_entered'); ?>
-	</div>
+		</div><!-- row -->
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>
 
-<?php $this->endWidget(); ?>
-
+<?php
+echo GxHtml::submitButton(Yii::t('app', 'Save'));
+$this->endWidget();
+?>
 </div><!-- form -->

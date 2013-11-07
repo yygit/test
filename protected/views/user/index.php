@@ -1,31 +1,19 @@
 <?php
-/* @var $this UserController */
-/* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs = array(
-    'Users',
+	User::label(2),
+	Yii::t('app', 'Index'),
 );
 
 $this->menu = array(
-    array('label' => 'Create User', 'url' => array('create')),
-    array('label' => 'Manage User', 'url' => array('admin')),
+	array('label'=>Yii::t('app', 'Create') . ' ' . User::label(), 'url' => array('create')),
+	array('label'=>Yii::t('app', 'Manage') . ' ' . User::label(2), 'url' => array('admin')),
 );
 ?>
 
-<h1>Users</h1>
-<h2>
-<?php
-if (isset(Yii::app()->user->name)) {echo 'Your USERNAME is "'.Yii::app()->user->name.'"';}
-echo '<br>';
-if (isset(Yii::app()->user->id)) {echo 'Your ID is "'.Yii::app()->user->id.'"';}
-echo '<br>';
-if (isset(Yii::app()->user->email)) {echo 'Your EMAIL is "'.Yii::app()->user->email.'"';}
-
-
-?>
-</h2>
+<h1><?php echo GxHtml::encode(User::label(2)); ?></h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
-    'dataProvider' => $dataProvider,
-    'itemView' => '_view',
-)); ?>
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_view',
+)); 

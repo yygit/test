@@ -1,33 +1,23 @@
-<?php
-/* @var $this UserController */
-/* @var $data User */
-?>
-
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('id')); ?>:
+	<?php echo GxHtml::link(GxHtml::encode($data->id), array('view', 'id' => $data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('username')); ?>:</b>
-	<?php echo CHtml::encode($data->username); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('username')); ?>:
+	<?php echo GxHtml::encode($data->username); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
-	<?php echo CHtml::encode($data->email); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('email')); ?>:
+	<?php echo GxHtml::encode($data->email); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('pass')); ?>:</b>
-	<?php echo CHtml::encode($data->pass); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('pass')); ?>:
+	<?php echo GxHtml::encode($data->pass); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('type')); ?>:</b>
-	<?php echo CHtml::encode($data->type); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('type')); ?>:
+	<?php echo GxHtml::encode($data->type); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('date_entered')); ?>:</b>
-	<?php echo CHtml::encode($data->date_entered); ?>
+	<?php echo GxHtml::encode($data->getAttributeLabel('date_entered')); ?>:
+	<?php echo GxHtml::encode($data->date_entered); ?>
 	<br />
-
 
 </div>

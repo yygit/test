@@ -1,60 +1,66 @@
-<?php
-/* @var $this PageController */
-/* @var $model Page */
-/* @var $form CActiveForm */
-?>
-
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'page-form',
-	'enableAjaxValidation'=>false,
-)); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+<?php $form = $this->beginWidget('GxActiveForm', array(
+	'id' => 'page-form',
+	'enableAjaxValidation' => false,
+));
+?>
+
+	<p class="note">
+		<?php echo Yii::t('app', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('app', 'are required'); ?>.
+	</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<!--<div class="row">
-		<?php /*echo $form->labelEx($model,'user_id'); */?>
-		<?php /*echo $form->textField($model,'user_id',array('size'=>10,'maxlength'=>10)); */?>
-		<?php /*echo $form->error($model,'user_id'); */?>
-	</div>-->
-
-	<div class="row">
+		<div class="row">
+		<?php echo $form->labelEx($model,'user_id'); ?>
+		<?php echo $form->dropDownList($model, 'user_id', GxHtml::listDataEx(User::model()->findAllAttributes(null, true))); ?>
+		<?php echo $form->error($model,'user_id'); ?>
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'live'); ?>
-		<?php echo $form->textField($model,'live'); ?>
+		<?php echo $form->textField($model, 'live'); ?>
 		<?php echo $form->error($model,'live'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'title'); ?>
-		<?php echo $form->textField($model,'title',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->textField($model, 'title', array('maxlength' => 100)); ?>
 		<?php echo $form->error($model,'title'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'content'); ?>
-		<?php echo $form->textArea($model,'content',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textArea($model, 'content'); ?>
 		<?php echo $form->error($model,'content'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'date_updated'); ?>
-		<?php echo $form->textField($model,'date_updated'); ?>
+		<?php echo $form->textField($model, 'date_updated'); ?>
 		<?php echo $form->error($model,'date_updated'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'date_published'); ?>
-		<?php echo $form->textField($model,'date_published'); ?>
+		<?php $form->widget('zii.widgets.jui.CJuiDatePicker', array(
+			'model' => $model,
+			'attribute' => 'date_published',
+			'value' => $model->date_published,
+			'options' => array(
+				'showButtonPanel' => true,
+				'changeYear' => true,
+				'dateFormat' => 'yy-mm-dd',
+				),
+			));
+; ?>
 		<?php echo $form->error($model,'date_published'); ?>
-	</div>
+		</div><!-- row -->
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>
+		<label><?php echo GxHtml::encode($model->getRelationLabel('comments')); ?></label>
+		<?php echo $form->checkBoxList($model, 'comments', GxHtml::encodeEx(GxHtml::listDataEx(Comment::model()->findAllAttributes(null, true)), false, true)); ?>
+		<label><?php echo GxHtml::encode($model->getRelationLabel('files')); ?></label>
+		<?php echo $form->checkBoxList($model, 'files', GxHtml::encodeEx(GxHtml::listDataEx(File::model()->findAllAttributes(null, true)), false, true)); ?>
 
-<?php $this->endWidget(); ?>
-
+<?php
+echo GxHtml::submitButton(Yii::t('app', 'Save'));
+$this->endWidget();
+?>
 </div><!-- form -->

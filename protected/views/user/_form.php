@@ -1,68 +1,53 @@
-<?php
-/* @var $this UserController */
-/* @var $model User */
-/* @var $form CActiveForm */
-?>
-
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'user-form',
-	'enableAjaxValidation'=>false,
-)); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+<?php $form = $this->beginWidget('GxActiveForm', array(
+	'id' => 'user-form',
+	'enableAjaxValidation' => false,
+));
+?>
+
+	<p class="note">
+		<?php echo Yii::t('app', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('app', 'are required'); ?>.
+	</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
+		<div class="row">
 		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->textField($model, 'username', array('maxlength' => 45)); ?>
 		<?php echo $form->error($model,'username'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'email'); ?>
-		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>60)); ?>
+		<?php echo $form->textField($model, 'email', array('maxlength' => 60)); ?>
 		<?php echo $form->error($model,'email'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'pass'); ?>
-		<?php
-            /* YY; dont show a pass */
-            $model->pass='';
-            echo $form->passwordField($model,'pass',array('size'=>60,'maxlength'=>64));
-        ?>
+		<?php echo $form->passwordField($model, 'pass', array('maxlength' => 64)); ?>
 		<?php echo $form->error($model,'pass'); ?>
-	</div>
-
-    <div class="row">
-		<?php echo $form->labelEx($model,'passCompare'); ?>
-		<?php
-            /* YY; dont show a pass */
-            $model->passCompare='';
-            echo $form->passwordField($model,'passCompare',array('size'=>60,'maxlength'=>64));
-        ?>
-		<?php echo $form->error($model,'passCompare'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'type'); ?>
-		<?php echo $form->textField($model,'type',array('size'=>6,'maxlength'=>6)); ?>
+		<?php echo $form->textField($model, 'type', array('maxlength' => 6)); ?>
 		<?php echo $form->error($model,'type'); ?>
-	</div>
-
-	<div class="row">
+		</div><!-- row -->
+		<div class="row">
 		<?php echo $form->labelEx($model,'date_entered'); ?>
-		<?php echo $form->textField($model,'date_entered'); ?>
+		<?php echo $form->textField($model, 'date_entered'); ?>
 		<?php echo $form->error($model,'date_entered'); ?>
-	</div>
+		</div><!-- row -->
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>
+		<label><?php echo GxHtml::encode($model->getRelationLabel('comments')); ?></label>
+		<?php echo $form->checkBoxList($model, 'comments', GxHtml::encodeEx(GxHtml::listDataEx(Comment::model()->findAllAttributes(null, true)), false, true)); ?>
+		<label><?php echo GxHtml::encode($model->getRelationLabel('files')); ?></label>
+		<?php echo $form->checkBoxList($model, 'files', GxHtml::encodeEx(GxHtml::listDataEx(File::model()->findAllAttributes(null, true)), false, true)); ?>
+		<label><?php echo GxHtml::encode($model->getRelationLabel('pages')); ?></label>
+		<?php echo $form->checkBoxList($model, 'pages', GxHtml::encodeEx(GxHtml::listDataEx(Page::model()->findAllAttributes(null, true)), false, true)); ?>
 
-<?php $this->endWidget(); ?>
-
+<?php
+echo GxHtml::submitButton(Yii::t('app', 'Save'));
+$this->endWidget();
+?>
 </div><!-- form -->

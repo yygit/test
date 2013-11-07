@@ -1,30 +1,37 @@
 <?php
-/* @var $this CommentController */
-/* @var $model Comment */
 
-$this->breadcrumbs=array(
-	'Comments'=>array('index'),
-	$model->id,
+$this->breadcrumbs = array(
+	$model->label(2) => array('index'),
+	GxHtml::valueEx($model),
 );
 
 $this->menu=array(
-	array('label'=>'List Comment', 'url'=>array('index')),
-	array('label'=>'Create Comment', 'url'=>array('create')),
-	array('label'=>'Update Comment', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Comment', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Comment', 'url'=>array('admin')),
+	array('label'=>Yii::t('app', 'List') . ' ' . $model->label(2), 'url'=>array('index')),
+	array('label'=>Yii::t('app', 'Create') . ' ' . $model->label(), 'url'=>array('create')),
+	array('label'=>Yii::t('app', 'Update') . ' ' . $model->label(), 'url'=>array('update', 'id' => $model->id)),
+	array('label'=>Yii::t('app', 'Delete') . ' ' . $model->label(), 'url'=>'#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>Yii::t('app', 'Manage') . ' ' . $model->label(2), 'url'=>array('admin')),
 );
 ?>
 
-<h1>View Comment #<?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('app', 'View') . ' ' . GxHtml::encode($model->label()) . ' ' . GxHtml::encode(GxHtml::valueEx($model)); ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'user_id',
-		'page_id',
-		'comment',
-		'date_entered',
+	'data' => $model,
+	'attributes' => array(
+'id',
+array(
+			'name' => 'user',
+			'type' => 'raw',
+			'value' => $model->user !== null ? GxHtml::link(GxHtml::encode(GxHtml::valueEx($model->user)), array('user/view', 'id' => GxActiveRecord::extractPkValue($model->user, true))) : null,
+			),
+array(
+			'name' => 'page',
+			'type' => 'raw',
+			'value' => $model->page !== null ? GxHtml::link(GxHtml::encode(GxHtml::valueEx($model->page)), array('page/view', 'id' => GxActiveRecord::extractPkValue($model->page, true))) : null,
+			),
+'comment',
+'date_entered',
 	),
 )); ?>
+

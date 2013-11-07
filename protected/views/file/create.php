@@ -1,18 +1,20 @@
 <?php
-/* @var $this FileController */
-/* @var $model File */
 
-$this->breadcrumbs=array(
-	'Files'=>array('index'),
-	'Create',
+$this->breadcrumbs = array(
+	$model->label(2) => array('index'),
+	Yii::t('app', 'Create'),
 );
 
-$this->menu=array(
-	array('label'=>'List File', 'url'=>array('index')),
-	array('label'=>'Manage File', 'url'=>array('admin')),
+$this->menu = array(
+	array('label'=>Yii::t('app', 'List') . ' ' . $model->label(2), 'url' => array('index')),
+	array('label'=>Yii::t('app', 'Manage') . ' ' . $model->label(2), 'url' => array('admin')),
 );
 ?>
 
-<h1>Create File</h1>
+<h1><?php echo Yii::t('app', 'Create') . ' ' . GxHtml::encode($model->label()); ?></h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php
+$this->renderPartial('_form', array(
+		'model' => $model,
+		'buttons' => 'create'));
+?>

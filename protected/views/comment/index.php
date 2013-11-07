@@ -1,20 +1,19 @@
 <?php
-/* @var $this CommentController */
-/* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	'Comments',
+$this->breadcrumbs = array(
+	Comment::label(2),
+	Yii::t('app', 'Index'),
 );
 
-$this->menu=array(
-	array('label'=>'Create Comment', 'url'=>array('create')),
-	array('label'=>'Manage Comment', 'url'=>array('admin')),
+$this->menu = array(
+	array('label'=>Yii::t('app', 'Create') . ' ' . Comment::label(), 'url' => array('create')),
+	array('label'=>Yii::t('app', 'Manage') . ' ' . Comment::label(2), 'url' => array('admin')),
 );
 ?>
 
-<h1>Comments</h1>
+<h1><?php echo GxHtml::encode(Comment::label(2)); ?></h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-)); ?>
+)); 
