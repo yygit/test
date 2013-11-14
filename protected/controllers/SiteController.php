@@ -6,7 +6,7 @@ class SiteController extends Controller{
         return array(
             'accessControl', // perform access control for CRUD operations
             array('ext.bootstrap.filters.BootstrapFilter + page'),
-            'ajaxOnly + ajaxresponse',
+            'ajaxOnly + ajaxresponse,getPageTitles,getPageTitlesAr',
         );
     }
 
@@ -176,6 +176,41 @@ class SiteController extends Controller{
 
     public function actionJsoncall() {
         $this->render('jsoncall');
+    }
+
+    public function actionAutocomplete() {
+        $this->render('autocomplete');
+    }
+
+    /**
+     * use query builder for faster performance
+     */
+    public function actionGetPageTitles() {
+        $q = 'SELECT id, title AS value FROM page WHERE title LIKE ?';
+        $cmd = Yii::app()->db->createCommand($q);
+        $result = $cmd->query(array('%' . $_GET['term'] . '%'));
+        $data = array();
+        foreach ($result as $row) {
+            $data[] = $row;
+        }
+        echo CJSON::encode($data);
+        Yii::app()->end();
+    }
+
+    /**
+     * a slower alternative to query builder in actionGetPageTitles()
+     */
+    public function actionGetPageTitlesAr() {
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'title LIKE :title';
+        $criteria->params = array(':title' => '%' . $_GET['term'] . '%');
+        $titles = Page::model()->findAll($criteria);
+        $data = array();
+        foreach ($titles as $row) {
+            $data[]['value'] = $row->title;
+        }
+        echo CJSON::encode($data);
+        Yii::app()->end();
     }
 
 
