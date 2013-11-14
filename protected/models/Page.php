@@ -44,12 +44,10 @@ class Page extends CActiveRecord{
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-//            array('user_id, title, date_updated', 'required'),
             array('user_id, title', 'required'),
             array('live', 'numerical', 'integerOnly' => true),
             array('user_id', 'length', 'max' => 10),
             array('title', 'length', 'max' => 100),
-//            array('content, date_published', 'safe'),
             array('content', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
@@ -144,7 +142,7 @@ class Page extends CActiveRecord{
             'CTimestampBehavior' => array(
                 'class' => 'zii.behaviors.CTimestampBehavior',
                 'createAttribute' => 'date_published',
-                'updateAttribute' => null, // updates in DB
+                'updateAttribute' => 'date_updated',
             )
         );
     }

@@ -6,6 +6,7 @@ class SiteController extends Controller{
         return array(
             'accessControl', // perform access control for CRUD operations
             array('ext.bootstrap.filters.BootstrapFilter + page'),
+            'ajaxOnly + ajaxresponse',
         );
     }
 
@@ -77,8 +78,12 @@ class SiteController extends Controller{
      * Displays the contact page
      */
     public function actionContact() {
-//        $this->layout = 'bootstrap';
         $model = new ContactForm;
+        // if it is ajax validation request
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'contact-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
         if (isset($_POST['ContactForm'])) {
             $model->attributes = $_POST['ContactForm'];
             if ($model->validate()) {
@@ -143,5 +148,35 @@ class SiteController extends Controller{
         $model = User::model()->find(); // find one
         $this->render('datepicker', array('model' => $model));
     }
+
+    public function actionJs() {
+        $this->render('js');
+    }
+
+    public function actionXml() {
+        $this->layout = 'xml';
+        $this->render('xml');
+    }
+
+    public function actionAjaxresponse() {
+        echo "<strong>$this->route:</strong> the date is " . date('r');
+    }
+
+    public function actionAjaxcall() {
+        $this->render('ajaxcall');
+    }
+
+    public function actionJsonresponse() {
+        $data = array(
+            'title' => 'json response title',
+            'content' => 'json response content at ' . date('r'),
+        );
+        echo CJSON::encode($data);
+    }
+
+    public function actionJsoncall() {
+        $this->render('jsoncall');
+    }
+
 
 }
