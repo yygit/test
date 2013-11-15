@@ -9,6 +9,7 @@
 <ul>
 	<li>View file: <tt><?php echo __FILE__; ?></tt></li>
 	<li>Layout file: <tt><?php echo $this->getLayoutFile('main'); ?></tt></li>
+	<!--<li>Layout file: <tt><?php /*var_dump(YiiBase::$_aliases);  */?></tt></li>-->
 </ul>
 
 <p>For more details on how to further develop this application, please read
