@@ -5,7 +5,7 @@ class m131115_234815_insert_admin extends TXDbMigration{
         $this->insert('user',array(
             'username'=>'admin',
             'email'=>'admin@sample.com',
-            'pass'=>'66af66db312bbea40fdb6caa8e74cee108983adb77141f9bb1a3c17fbf63588d',
+            'pass'=>'e930f7b5d9a984bdf1e0422344833e591345b34f704c1abdbb19b97d3aad5afc',
             'type'=>'admin',
         ));
     }

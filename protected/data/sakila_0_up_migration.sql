@@ -19,7 +19,7 @@ DEFAULT CHARACTER SET = utf8;
 
 
 INSERT INTO user (id, username, email, pass) VALUES (23, 'demo',
-'demo@sample.com', SHA2('demodemodemo@sample.com', 256));
+'demo@sample.com', '99cfdd79cb083c54ff35b82aed94e701a97a6309ec1ba42073d62c62524f2dde');
 
 CREATE TABLE IF NOT EXISTS page (
 id INT UNSIGNED NOT NULL AUTO_INCREMENT,

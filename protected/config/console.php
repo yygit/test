@@ -8,7 +8,7 @@ return array(
 	'commandMap' => array(
 		'clean' => array(
 			'class' => 'ext.clean_command.ECleanCommand',
-			'webRoot' => 'd:\htdocs\test',
+			'webRoot' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..',
 		),
 	),
     'import' => array(
