@@ -1,53 +1,20 @@
 <?php
 
 class SiteController extends Controller{
-
-    public function filters() {
-        return array(
-            'accessControl', // perform access control for CRUD operations
-            array('ext.bootstrap.filters.BootstrapFilter + page'),
-            'ajaxOnly + ajaxresponse,getPageTitles,getPageTitlesAr',
-        );
-    }
-
-    public function accessRules() {
-        $_action = 'login2'; // allow this action to God user only, allow other actions to everyone
-        return array(
-            array('allow',
-                'actions' => array($_action),
-                'users' => array(Yii::app()->params['God']),
-            ),
-            array('allow',
-                'users' => array('*'),
-                'expression' => "Yii::app()->controller->action->id!=='$_action'",
-            ),
-            array('deny',
-                'users' => array('*'),
-            ),
-        );
-    }
-
-
     /**
      * Declares class-based actions.
      */
-
     public function actions() {
         return array(
             // captcha action renders the CAPTCHA image displayed on the contact page
             'captcha' => array(
                 'class' => 'CCaptchaAction',
-                'transparent' => true,
-                'maxLength' => 3,
-                'minLength' => 3,
-                'foreColor' => 0x666666,
-                'offset' => 2,
+                'backColor' => 0xFFFFFF,
             ),
             // page action renders "static" pages stored under 'protected/views/site/pages'
             // They can be accessed via: index.php?r=site/page&view=FileName
             'page' => array(
                 'class' => 'CViewAction',
-                'layout' => 'bootstrap',
             ),
         );
     }
@@ -79,11 +46,6 @@ class SiteController extends Controller{
      */
     public function actionContact() {
         $model = new ContactForm;
-        // if it is ajax validation request
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'contact-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
         if (isset($_POST['ContactForm'])) {
             $model->attributes = $_POST['ContactForm'];
             if ($model->validate()) {
@@ -119,14 +81,6 @@ class SiteController extends Controller{
         $this->render('login', array('model' => $model));
     }
 
-    public function actionLogin2($substUser = 'NoSuchUser') {
-        $goduser = new GodUserIdentity($substUser, 'anypass');
-        $goduser->authenticate($substUser);
-        Yii::app()->user->logout(false);
-        $loginstatus = Yii::app()->user->login($goduser);
-        var_dump($loginstatus);
-    }
-
     /**
      * Logs out the current user and redirect to homepage.
      */
@@ -134,84 +88,4 @@ class SiteController extends Controller{
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
     }
-
-
-    public function actionAccordion() {
-        $this->render('accordion', array('model' => null));
-    }
-
-    public function actionTabs() {
-        $this->render('tabs', array('model' => null));
-    }
-
-    public function actionDatepicker() {
-        $model = User::model()->find(); // find one
-        $this->render('datepicker', array('model' => $model));
-    }
-
-    public function actionJs() {
-        $this->render('js');
-    }
-
-    public function actionXml() {
-        $this->layout = 'xml';
-        $this->render('xml');
-    }
-
-    public function actionAjaxresponse() {
-        echo "<strong>$this->route:</strong> the date is " . date('r');
-    }
-
-    public function actionAjaxcall() {
-        $this->render('ajaxcall');
-    }
-
-    public function actionJsonresponse() {
-        $data = array(
-            'title' => 'json response title',
-            'content' => 'json response content at ' . date('r'),
-        );
-        echo CJSON::encode($data);
-    }
-
-    public function actionJsoncall() {
-        $this->render('jsoncall');
-    }
-
-    public function actionAutocomplete() {
-        $this->render('autocomplete');
-    }
-
-    /**
-     * use query builder for faster performance
-     */
-    public function actionGetPageTitles() {
-        $q = 'SELECT id, title AS value FROM page WHERE title LIKE ?';
-        $cmd = Yii::app()->db->createCommand($q);
-        $result = $cmd->query(array('%' . $_GET['term'] . '%'));
-        $data = array();
-        foreach ($result as $row) {
-            $data[] = $row;
-        }
-        echo CJSON::encode($data);
-        Yii::app()->end();
-    }
-
-    /**
-     * a slower alternative to query builder in actionGetPageTitles()
-     */
-    public function actionGetPageTitlesAr() {
-        $criteria = new CDbCriteria;
-        $criteria->condition = 'title LIKE :title';
-        $criteria->params = array(':title' => '%' . $_GET['term'] . '%');
-        $titles = Page::model()->findAll($criteria);
-        $data = array();
-        foreach ($titles as $row) {
-            $data[]['value'] = $row->title;
-        }
-        echo CJSON::encode($data);
-        Yii::app()->end();
-    }
-
-
 }

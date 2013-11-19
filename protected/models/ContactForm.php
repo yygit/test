@@ -21,8 +21,12 @@ class ContactForm extends CFormModel{
             array('name, email, subject, body', 'required'),
             // email has to be a valid email address
             array('email', 'email'),
-            // email has to be unique from User model
-            array('email', 'unique', 'attributes'=>array('email'), 'className'=>'User'),
+
+            /*// email has to be unique for the User model
+            array('email', 'unique', 'attributes'=>array('email'), 'className'=>'User'),*/
+            // email has to exist in the User model
+            array('email', 'exist', 'attributes' => array('email'), 'className' => 'User','message' => '{value} does not belong to any user'),
+
             // verifyCode needs to be entered correctly
             array('verifyCode', 'captcha', 'allowEmpty' => !CCaptcha::checkRequirements()),
         );

@@ -85,10 +85,10 @@ return array(
             'class'=>'CDbAuthManager',
             'connectionID'=>'db',
         ), */
-        'bootstrap' => array(
+        /*'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',
             'responsiveCss' => true,
-        ),
+        ),*/
         /*'session' => array(
             'class' => 'CDbHttpSession',
             'connectionID' => 'db',
