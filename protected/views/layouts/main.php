@@ -44,7 +44,6 @@
                 array('label' => 'Home', 'url' => array('/'), 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController.'/'.$this->defaultAction ? 'active' : null)),
                 array('label' => 'About', 'url' => array('/site/page', 'view' => 'about')),
                 array('label' => 'Contact', 'url' => array('/site/contact')),
-                array('label' => 'Projects', 'url' => array('/project'), 'itemOptions' => array('class' => $this->id == 'project' ? 'active' : null)),
                 array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
                 array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
             ),
