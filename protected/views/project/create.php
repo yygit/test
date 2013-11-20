@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Project</h1>
+<h1>Create Project (owned by user # <?php echo $this->_userId; ?>)</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

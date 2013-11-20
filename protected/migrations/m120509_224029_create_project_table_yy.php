@@ -7,9 +7,9 @@ class m120509_224029_create_project_table_yy  extends  CDbMigration{
             'name' => 'string NOT NULL',
             'description' => 'text NOT NULL',
             'create_time' => 'datetime DEFAULT NULL',
-            'create_user_id' => 'int(11) DEFAULT NULL',
+            'create_user_id' => 'int(11) NOT NULL',
             'update_time' => 'datetime DEFAULT NULL',
-            'update_user_id' => 'int(11) DEFAULT NULL',
+            'update_user_id' => 'int(11) NOT NULL',
         ), 'ENGINE=InnoDB');
     }
 

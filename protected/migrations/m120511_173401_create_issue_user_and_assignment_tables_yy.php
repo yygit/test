@@ -11,15 +11,15 @@ class m120511_173401_create_issue_user_and_assignment_tables_yy extends CDbMigra
             'id' => 'pk',
             'name' => 'string NOT NULL',
             'description' => 'text',
-            'project_id' => 'int(11) DEFAULT NULL',
-            'type_id' => 'int(11) DEFAULT NULL',
-            'status_id' => 'int(11) DEFAULT NULL',
-            'owner_id' => 'int(11) DEFAULT NULL',
-            'requester_id' => 'int(11) DEFAULT NULL',
+            'project_id' => 'int(11) NOT NULL',
+            'type_id' => 'int(11) NOT NULL',
+            'status_id' => 'int(11) NOT NULL',
+            'owner_id' => 'int(11) NOT NULL',
+            'requester_id' => 'int(11) NOT NULL',
             'create_time' => 'datetime DEFAULT NULL',
-            'create_user_id' => 'int(11) DEFAULT NULL',
+            'create_user_id' => 'int(11) NOT NULL',
             'update_time' => 'datetime DEFAULT NULL',
-            'update_user_id' => 'int(11) DEFAULT NULL',
+            'update_user_id' => 'int(11) NOT NULL',
         ), 'ENGINE=InnoDB');
 
         //create the user table
@@ -30,9 +30,9 @@ class m120511_173401_create_issue_user_and_assignment_tables_yy extends CDbMigra
             'password' => 'string NOT NULL',
             'last_login_time' => 'datetime DEFAULT NULL',
             'create_time' => 'datetime DEFAULT NULL',
-            'create_user_id' => 'int(11) DEFAULT NULL',
+            'create_user_id' => 'int(11) NOT NULL',
             'update_time' => 'datetime DEFAULT NULL',
-            'update_user_id' => 'int(11) DEFAULT NULL',
+            'update_user_id' => 'int(11) NOT NULL',
         ), 'ENGINE=InnoDB');
 
         //create the assignment table that allows for many-to-many relationship between projects and users
@@ -42,7 +42,7 @@ class m120511_173401_create_issue_user_and_assignment_tables_yy extends CDbMigra
             'PRIMARY KEY (`project_id`,`user_id`)',
         ), 'ENGINE=InnoDB');
 
-        //foreign key relationships
+        /*foreign key relationships*/
 
         //the tbl_issue.project_id is a reference to tbl_project.id
         $this->addForeignKey("fk_issue_project", "tbl_issue", "project_id", "tbl_project", "id", "CASCADE", "RESTRICT");
@@ -58,7 +58,6 @@ class m120511_173401_create_issue_user_and_assignment_tables_yy extends CDbMigra
 
         //the tbl_project_user_assignment.user_id is a reference to tbl_user.id
         $this->addForeignKey("fk_user_project", "tbl_project_user_assignment", "user_id", "tbl_user", "id", "CASCADE", "RESTRICT");
-
     }
 
     public function safeDown() {

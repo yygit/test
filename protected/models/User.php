@@ -118,4 +118,12 @@ class User extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function init() {
+        $this->attachEventHandler('onBeforeSave', array($this, 'encodePass'));
+    }
+
+    public function encodePass() {
+        $this->password = md5($this->password);
+    }
 }
