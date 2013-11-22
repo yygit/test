@@ -13,12 +13,18 @@ class IssueController extends Controller{
     public $_project = null;
 
     /**
+     * @var User property containing the associated User model instance.
+     */
+    public $_userId = null;
+
+    /**
      * @return array action filters
      */
     public function filters() {
         return array(
             'accessControl', // perform access control for CRUD operations
-            'projectContext + create', //check to ensure valid project context
+            'projectContext + create', // check to ensure valid project context
+            'userContext + create,update', // check to ensure valid user context
         );
     }
 
@@ -28,17 +34,21 @@ class IssueController extends Controller{
      * @return array access control rules
      */
     public function accessRules() {
+        $id = Yii::app()->request->getQuery('id');
+        $ownerId = $id ? $this->loadModel($id)->owner_id : null;
+
         return array(
-            array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view'),
-                'users' => array('*'),
-            ),
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update'),
+            array('allow', // allow
+                'actions' => array('index', 'admin', 'create'),
                 'users' => array('@'),
             ),
+            array('allow', // allow
+                'actions' => array('update', 'view'),
+                'users' => array('@'),
+                'expression' => "Yii::app()->user->id==$ownerId OR Yii::app()->user->name==Yii::app()->params['God']",
+            ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
+                'actions' => array('delete'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -64,11 +74,11 @@ class IssueController extends Controller{
     public function actionCreate() {
         $model = new Issue;
         $model->project_id = $this->_project->id;
-        $model->update_user_id = $this->_project->updateUser->id;
-        $model->create_user_id = $this->_project->createUser->id;
+        $model->update_user_id = $this->_userId;
+        $model->create_user_id = $this->_userId;
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['Issue'])) {
             $model->attributes = $_POST['Issue'];
@@ -88,9 +98,10 @@ class IssueController extends Controller{
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $model->update_user_id = $this->_userId;
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['Issue'])) {
             $model->attributes = $_POST['Issue'];
@@ -121,6 +132,9 @@ class IssueController extends Controller{
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('Issue');
+        $dataProvider->criteria = array(
+            'scopes' => array('owners'),
+        );
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
@@ -131,6 +145,7 @@ class IssueController extends Controller{
      */
     public function actionAdmin() {
         $model = new Issue('search');
+        $model->owners();
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['Issue']))
             $model->attributes = $_GET['Issue'];
@@ -195,4 +210,30 @@ class IssueController extends Controller{
         //complete the running of other filters and execute the requested action
         $filterChain->run();
     }
+
+    /**
+     * Protected method to load the associated User model class to assign Project's Owning User
+     * @return object the User data model based on the primary key
+     */
+    protected function loadUser() {
+        //if the user property is null, create it based on input id
+        if ($this->_userId === null) {
+            $this->_userId = Yii::app()->user->id;
+            if ($this->_userId === null)
+                throw new CHttpException(404, 'The associated user does not exist or not logged.');
+        }
+        return $this->_userId;
+    }
+
+    /**
+     * In-class defined filter method, configured for use in the above filters() method
+     * It is called before the actionCreate() action method is run in order to ensure a proper user context
+     */
+    public function filterUserContext($filterChain) {
+        $this->loadUser();
+
+        //complete the running of other filters and execute the requested action
+        $filterChain->run();
+    }
+
 }

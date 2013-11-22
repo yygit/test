@@ -17,9 +17,9 @@
 	<?php echo CHtml::encode($data->email); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('password')); ?>:</b>
-	<?php echo CHtml::encode($data->password); ?>
-	<br />
+	<!--<b><?php /*echo CHtml::encode($data->getAttributeLabel('password')); */?>:</b>
+	<?php /*echo CHtml::encode($data->password); */?>
+	<br />-->
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('last_login_time')); ?>:</b>
 	<?php echo CHtml::encode($data->last_login_time); ?>
@@ -30,7 +30,8 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('create_user_id')); ?>:</b>
-	<?php echo CHtml::encode($data->create_user_id); ?>
+	<?php /*echo CHtml::encode($data->create_user_id); */?>
+	<?php echo CHtml::encode($this->loadModel($data->create_user_id)->username); ?>
 	<br />
 
 	<?php /*

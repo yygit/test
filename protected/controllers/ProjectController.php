@@ -30,13 +30,22 @@ class ProjectController extends Controller{
      * @return array access control rules
      */
     public function accessRules() {
+        $id = Yii::app()->request->getQuery('id');
+        $model = $id ? $this->loadModel($id) : null;
+        $allow = in_array(Yii::app()->user->id, array_values(Project::listRelatedAttr($model, 'users', 'id'))) ? 'true' : 'false';
+
         return array(
-            array('allow', // allow authenticated user to perform these actions
-                'actions' => array('index', 'view', 'create', 'update'),
+            array('allow', // allow
+                'actions' => array('index', 'admin', 'create'),
                 'users' => array('@'),
             ),
+            array('allow', // allow
+                'actions' => array('view', 'update'),
+                'users' => array('@'),
+                'expression' => "$allow OR Yii::app()->user->name==Yii::app()->params['God']",
+            ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
+                'actions' => array('delete'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -54,9 +63,10 @@ class ProjectController extends Controller{
             'criteria' => array(
                 'condition' => 'project_id=:projectId',
                 'params' => array(':projectId' => $this->loadModel($id)->id),
+                'scopes' => array('owners'),
             ),
             'pagination' => array(
-                'pageSize' => 1,
+                'pageSize' => 5,
             ),
         ));
 
@@ -131,6 +141,9 @@ class ProjectController extends Controller{
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('Project');
+        $dataProvider->criteria = array(
+            'scopes' => array('assignedUsers'),
+        );
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
@@ -141,6 +154,7 @@ class ProjectController extends Controller{
      */
     public function actionAdmin() {
         $model = new Project('search');
+        $model->assignedUsers(); // list only projects having currently auth user among the assigned users
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['Project']))
             $model->attributes = $_GET['Project'];

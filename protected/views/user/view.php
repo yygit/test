@@ -24,11 +24,19 @@ $this->menu=array(
 		'id',
 		'username',
 		'email',
-		'password',
+//		'password',
 		'last_login_time',
 		'create_time',
-		'create_user_id',
+//		'create_user_id',
+        array(
+            'name'=>'create_user_id',
+            'value'=>'#'.$model->create_user_id.' ('.CHtml::encode($this->loadModel($model->create_user_id)->username).')',
+        ),
 		'update_time',
-		'update_user_id',
+//		'update_user_id',
+        array(
+            'name'=>'update_user_id',
+            'value'=>'#'.$model->update_user_id.' ('.CHtml::encode($this->loadModel($model->update_user_id)->username).')',
+        ),
 	),
 )); ?>

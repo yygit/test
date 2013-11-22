@@ -53,6 +53,12 @@ class m120511_173401_create_issue_user_and_assignment_tables_yy extends CDbMigra
         //the tbl_issue.requester_id is a reference to tbl_user.id
         $this->addForeignKey("fk_issue_requester", "tbl_issue", "requester_id", "tbl_user", "id", "CASCADE", "RESTRICT");
 
+        //the tbl_issue.create_user_id is a reference to tbl_user.id
+        $this->addForeignKey("fk_issue_create_user", "tbl_issue", "create_user_id", "tbl_user", "id", "CASCADE", "RESTRICT");
+
+        //the tbl_issue.update_user_id is a reference to tbl_user.id
+        $this->addForeignKey("fk_issue_update_user", "tbl_issue", "update_user_id", "tbl_user", "id", "CASCADE", "RESTRICT");
+
         //the tbl_project_user_assignment.project_id is a reference to tbl_project.id
         $this->addForeignKey("fk_project_user", "tbl_project_user_assignment", "project_id", "tbl_project", "id", "CASCADE", "RESTRICT");
 
@@ -63,6 +69,8 @@ class m120511_173401_create_issue_user_and_assignment_tables_yy extends CDbMigra
     public function safeDown() {
         $this->dropForeignKey('fk_user_project','tbl_project_user_assignment');
         $this->dropForeignKey('fk_project_user','tbl_project_user_assignment');
+        $this->dropForeignKey('fk_issue_update_user','tbl_issue');
+        $this->dropForeignKey('fk_issue_create_user','tbl_issue');
         $this->dropForeignKey('fk_issue_requester','tbl_issue');
         $this->dropForeignKey('fk_issue_owner','tbl_issue');
         $this->dropForeignKey('fk_issue_project','tbl_issue');

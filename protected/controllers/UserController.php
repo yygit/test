@@ -8,12 +8,18 @@ class UserController extends Controller{
     public $layout = '//layouts/column2';
 
     /**
+     * @var User property containing the associated User model instance.
+     */
+    public $_userId = null;
+
+    /**
      * @return array action filters
      */
     public function filters() {
         return array(
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
+            'userContext + create,update', //check to ensure valid user context
         );
     }
 
@@ -64,7 +70,7 @@ class UserController extends Controller{
         $model = new User;
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+         $this->performAjaxValidation($model);
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
@@ -86,7 +92,7 @@ class UserController extends Controller{
         $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+         $this->performAjaxValidation($model);
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
@@ -117,6 +123,7 @@ class UserController extends Controller{
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('User');
+        $dataProvider->criteria = array('scopes' => array('myself')); // YY; 20131122; show yourself only (show all to 'God' user)
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
@@ -127,6 +134,7 @@ class UserController extends Controller{
      */
     public function actionAdmin() {
         $model = new User('search');
+        $model->myself();
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['User']))
             $model->attributes = $_GET['User'];
@@ -160,4 +168,30 @@ class UserController extends Controller{
             Yii::app()->end();
         }
     }
+
+    /**
+     * Protected method to load the associated User model class to assign Project's Owning User
+     * @return object the User data model based on the primary key
+     */
+    protected function loadUser() {
+        //if the user property is null, create it based on input id
+        if ($this->_userId === null) {
+            $this->_userId = Yii::app()->user->id;
+            if ($this->_userId === null)
+                throw new CHttpException(404, 'The associated user does not exist or not logged.');
+        }
+        return $this->_userId;
+    }
+
+    /**
+     * In-class defined filter method, configured for use in the above filters() method
+     * It is called before the actionCreate() action method is run in order to ensure a proper user context
+     */
+    public function filterUserContext($filterChain) {
+        $this->loadUser();
+
+        //complete the running of other filters and execute the requested action
+        $filterChain->run();
+    }
+
 }

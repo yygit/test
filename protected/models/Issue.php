@@ -59,11 +59,13 @@ class Issue extends CActiveRecord{
             array('project_id, type_id, status_id, owner_id, requester_id, create_user_id, update_user_id', 'numerical', 'integerOnly' => true),
             array('type_id', 'in', 'range'=>self::getAllowedTypeRange()),
             array('status_id', 'in', 'range'=>self::getAllowedStatusRange()),
+            array('owner_id', 'in', 'range'=>Project::listRelatedAttr(Project::model()->findByPk($this->project_id),'users','id'), 'on' => 'insert,update'),
             array('name', 'length', 'max' => 255),
             array('description, create_time, update_time', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, name, description, project_id, type_id, status_id, owner_id, requester_id, create_time, create_user_id, update_time, update_user_id', 'safe', 'on' => 'search'),
+            array('project_id, create_user_id, update_user_id', 'unsafe', 'on' => 'insert,update'),
         );
     }
 
@@ -76,6 +78,8 @@ class Issue extends CActiveRecord{
         return array(
             'requester' => array(self::BELONGS_TO, 'User', 'requester_id'),
             'owner' => array(self::BELONGS_TO, 'User', 'owner_id'),
+            'creator' => array(self::BELONGS_TO, 'User', 'create_user_id'),
+            'updator' => array(self::BELONGS_TO, 'User', 'update_user_id'),
             'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
         );
     }
@@ -185,4 +189,34 @@ class Issue extends CActiveRecord{
         $typeOptions = $this->getTypeOptions();
         return isset($typeOptions[$this->type_id]) ? $typeOptions[$this->type_id] : "unknown type ({$this->type_id})";
     }
+
+    public function behaviors(){
+        return array(
+            'CTimestampBehavior' => array(
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'create_time',
+                'updateAttribute' => 'update_time',
+                'setUpdateOnCreate' => true,
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function scopes() {
+        $user = Yii::app()->user;
+        if (empty($user->id) OR empty($user->name) OR $user->name === Yii::app()->params['God'])
+            return array(
+                'owners' => array(),
+            );
+
+        return array(
+            'owners' => array(
+                'condition'=>'t.owner_id='. $user->id,
+            )
+        );
+    }
+
+
 }

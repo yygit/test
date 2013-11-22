@@ -13,10 +13,10 @@
  * @property integer $update_user_id
  *
  * The followings are the available model relations:
- * @property TblIssue[] $tblIssues
- * @property TblUser $updateUser
- * @property TblUser $createUser
- * @property TblUser[] $tblUsers
+ * @property Issue $issues
+ * @property User $updateUser
+ * @property User $createUser
+ * @property User $users array of User models type AR
  */
 class Project extends CActiveRecord{
     /**
@@ -110,5 +110,72 @@ class Project extends CActiveRecord{
     public function getUserOptions() {
         $usersArray = CHtml::listData($this->users, 'id', 'username');
         return $usersArray;
+    }
+
+    public function behaviors(){
+        return array(
+            'CTimestampBehavior' => array(
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'create_time',
+                'updateAttribute' => 'update_time',
+                'setUpdateOnCreate' => true,
+            )
+        );
+    }
+
+    /**
+     * print attribute(s) of related models that are in MANY_MANY relation
+     * @param $model CActiveRecord parent model
+     * @param string $relation
+     * @param null $attr
+     * @return string
+     */
+    public static function printNames($model, $relation = 'users', $attr = null) {
+        if (empty($model->$relation)) return '';
+        $names = '';
+        foreach ($model->$relation as $v) {
+            if ($attr)
+                $names .= print_r($v->$attr, true);
+            else
+                $names .= print_r($v->attributes, true);
+            $names .= ', ';
+        }
+        return CHtml::encode(rtrim($names,', '));
+    }
+
+    /**
+     * list attribute(s) of related models that are in MANY_MANY relation; used in ProjectController::accessRules()
+     * @param $model CActiveRecord parent model
+     * @param string $relation
+     * @param null|string $attr
+     * @return array
+     */
+    public static function listRelatedAttr ($model, $relation = 'users', $attr = null) {
+        $ids = array();
+        if (empty($model->$relation)) return $ids;
+        foreach ($model->$relation as $v) {
+            if ($attr AND isset($v->$attr))
+                $ids[] = $v->$attr;
+            else
+                $ids[] = print_r($v->attributes, true);
+        }
+        return $ids;
+    }
+
+    /**
+     * @return array
+     */
+    public function scopes() {
+        $user = Yii::app()->user;
+        if (empty($user->id) OR empty($user->name) OR $user->name === Yii::app()->params['God'])
+            return array(
+                'assignedUsers' => array(),
+            );
+
+        return array(
+            'assignedUsers' => array(
+                'join'=>'JOIN '.ProjectUserAssignment::tableName().' t1 ON t1.project_id=t.id AND t1.user_id='. $user->id,
+            )
+        );
     }
 }

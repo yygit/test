@@ -24,14 +24,42 @@ $this->menu=array(
 		'id',
 		'name',
 		'description',
-		'project_id',
-		'type_id',
-		'status_id',
-		'owner_id',
-		'requester_id',
+//		'project_id',
+        array(
+            'name'=>'project_id',
+            'value'=>'#'.$model->project_id.' ('.CHtml::encode($model->project->name).')',
+        ),
+//		'type_id',
+        array(
+            'name'=>'type_id',
+            'value'=>CHtml::encode($model->getTypeText()),
+        ),
+//		'status_id',
+        array(
+            'name'=>'status_id',
+            'value'=>CHtml::encode($model->getStatusText()),
+        ),
+//		'owner_id',
+        array(
+            'name'=>'owner_id',
+            'value'=>isset($model->owner)?CHtml::encode($model->owner->username):"unknown"
+        ),
+//        'requester_id',
+        array(
+            'name'=>'requester_id',
+            'value'=>isset($model->requester)?CHtml::encode($model->requester->username):"unknown"
+        ),
 		'create_time',
-		'create_user_id',
+//		'create_user_id',
+        array(
+            'name'=>'create_user_id',
+            'value'=>isset($model->creator)?CHtml::encode($model->creator->username):"unknown"
+        ),
 		'update_time',
-		'update_user_id',
+//		'update_user_id',
+        array(
+            'name'=>'update_user_id',
+            'value'=>isset($model->updator)?CHtml::encode($model->updator->username):"unknown"
+        ),
 	),
 )); ?>
