@@ -21,8 +21,13 @@
  * @property TblProject[] $tblProjects1
  * @property TblProject[] $tblProjects2
  *
+ * @method array() myself() defined in @link self::scopes()
+ *
  */
-class User extends CActiveRecord{
+class User extends TrackStarAR{
+
+    public $oldPassword = null;
+
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -46,11 +51,15 @@ class User extends CActiveRecord{
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('username, email, password', 'required'),
+            array('email', 'required'),
+            array('password, username', 'required', 'on' => 'insert'),
             array('username, email, password', 'filter', 'filter' => 'trim'),
             array('email', 'email'),
-            array('username, email, password', 'length', 'max' => 255),
-            array('last_login_time', 'safe'),
+            array('username, email', 'length', 'max' => 255),
+            array('password', 'length', 'max' => 255, 'allowEmpty' => true),
+            array('username, email', 'unique'),
+            array('last_login_time', 'unsafe'),
+            array('username', 'unsafe', 'on' => 'update'),
             // Please remove those attributes that should not be searched.
             array('id, username, email, password, last_login_time, create_time, create_user_id, update_time, update_user_id', 'safe', 'on' => 'search'),
         );
@@ -114,35 +123,16 @@ class User extends CActiveRecord{
     }
 
     public function init() {
+        parent::init();
         $this->attachEventHandler('onBeforeSave', array($this, 'encodePass'));
-        $this->attachEventHandler('onBeforeSave', array($this, 'assignIds'));
     }
 
     public function encodePass() {
-        $this->password = md5($this->password);
-    }
-
-    /*
-     * assign creator and updator user ids to the model
-     */
-    public function assignIds() {
-        $id = Yii::app()->user->id;
-        if ($id === null)
-            throw new CHttpException(404, 'The associated user is NOT authenticated.');
-        $this->update_user_id = $id;
-        if ($this->isNewRecord)
-            $this->create_user_id = $id;
-    }
-
-    public function behaviors() {
-        return array(
-            'CTimestampBehavior' => array(
-                'class' => 'zii.behaviors.CTimestampBehavior',
-                'createAttribute' => 'create_time',
-                'updateAttribute' => 'update_time',
-                'setUpdateOnCreate' => true,
-            )
-        );
+        if (!empty($this->password))
+            $this->password = md5($this->password);
+        elseif (empty($this->oldPassword))
+            throw new CException('old pass is empty'); else
+            $this->password = $this->oldPassword;
     }
 
     /**

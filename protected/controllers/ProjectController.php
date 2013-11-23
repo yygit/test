@@ -6,6 +6,7 @@ class ProjectController extends Controller{
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
+    public $defaultAction = 'admin';
 
     /**
      * @var User property containing the associated User model instance.
@@ -83,8 +84,6 @@ class ProjectController extends Controller{
      */
     public function actionCreate() {
         $model = new Project;
-        $model->create_user_id = $this->_userId;
-        $model->update_user_id = $this->_userId;
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -107,10 +106,9 @@ class ProjectController extends Controller{
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-        $model->update_user_id = $this->_userId;
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+         $this->performAjaxValidation($model);
 
         if (isset($_POST['Project'])) {
             $model->attributes = $_POST['Project'];

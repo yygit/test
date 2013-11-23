@@ -1,15 +1,16 @@
 <?php $this->pageTitle = Yii::app()->name; ?>
 
 <h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
-<h2><?php echo Yii::app()->controller->action->id; ?></h2>
+<?php if (!Yii::app()->user->isGuest):?>
+    <p>
+        You last logged in on <b><?php echo Yii::app()->user->lastLogin; ?></b>.
+    </p>
+<?php endif; ?>
 
-<p>Congratulations! You have successfully created your Yii application.</p>
-
-<p>You may change the content of this page by modifying the following two files:</p>
 <ul>
     <li>View file: <tt><?php echo __FILE__; ?></tt></li>
     <li>Layout: <tt><?php echo $this->layout; ?></tt></li>
     <li>Layout file: <tt><?php echo $this->getLayoutFile($this->layout); ?></tt></li>
-    <li>YiiBase::$_aliases <tt><?php var_dump(YiiBase::$_aliases);  ?></tt></li>
+    <li>YiiBase::$_aliases <?php var_dump(YiiBase::$_aliases); ?></li>
 </ul>
 

@@ -17,8 +17,9 @@
  * @property User $updateUser
  * @property User $createUser
  * @property User $users array of User models type AR
+ * @method array() assignedUsers() defined in scopes()
  */
-class Project extends CActiveRecord{
+class Project extends TrackStarAR {
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -42,7 +43,7 @@ class Project extends CActiveRecord{
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, description, create_user_id, update_user_id', 'required'),
+            array('name, description', 'required'),
             array('create_user_id, update_user_id', 'numerical', 'integerOnly' => true),
             array('name', 'length', 'max' => 255),
             array('create_time, update_time', 'safe'),

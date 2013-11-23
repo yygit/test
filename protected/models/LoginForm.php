@@ -10,6 +10,9 @@ class LoginForm extends CFormModel{
     public $password;
     public $rememberMe;
 
+    /**
+     * @var UserIdentity
+     */
     private $_identity;
 
     /**
@@ -61,9 +64,49 @@ class LoginForm extends CFormModel{
         }
         if ($this->_identity->errorCode === UserIdentity::ERROR_NONE) {
             $duration = $this->rememberMe ? 3600 * 24 * 30 : 0; // 30 days
-            Yii::app()->user->login($this->_identity, $duration);
+            $login = Yii::app()->user->login($this->_identity, $duration);
+            $this->setLastlogintime($login, 'User', 'last_login_time');
             return true;
         } else
             return false;
     }
+
+    /**
+     * Gets the approprate timestamp depending on the column type $attribute is
+     *
+     * @param CActiveRecord $arModel
+     * @param string $attribute
+     * @param boolean $login
+     * @return mixed timestamp (eg unix timestamp or a mysql function)
+     */
+    private function setLastlogintime($login = false, $arModel = 'User', $attribute = 'last_login_time') {
+        if (!$login) return false;
+        $model = $arModel::model()->findByPk($this->_identity->getId());
+        if (empty($model)) return false;
+        $columnType = $model->getTableSchema()->getColumn($attribute)->dbType;
+        $model->$attribute = $this->getTimestampByColumnType($columnType);
+        Yii::app()->user->setState('lastLogin',date('r'));
+        return $model->saveAttributes(array($attribute));
+    }
+
+    /**
+     * @var array Maps column types to database method
+     */
+    private static $map = array(
+        'datetime' => 'NOW()',
+        'timestamp' => 'NOW()',
+        'date' => 'NOW()',
+    );
+
+    /**
+     * Returns the approprate timestamp depending on $columnType
+     *
+     * @param string $columnType $columnType
+     * @return mixed timestamp (eg unix timestamp or a mysql function)
+     */
+    private function getTimestampByColumnType($columnType) {
+        return isset(self::$map[$columnType]) ? new CDbExpression(self::$map[$columnType]) : time();
+    }
+
+
 }

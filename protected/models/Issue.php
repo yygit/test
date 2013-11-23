@@ -21,8 +21,9 @@
  * @property User $requester
  * @property User $owner
  * @property Project $project
+ * @method array owners() defined in scopes()
  */
-class Issue extends CActiveRecord{
+class Issue extends TrackStarAR {
 
     const TYPE_BUG = 0;
     const TYPE_FEATURE = 1;
@@ -65,7 +66,6 @@ class Issue extends CActiveRecord{
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, name, description, project_id, type_id, status_id, owner_id, requester_id, create_time, create_user_id, update_time, update_user_id', 'safe', 'on' => 'search'),
-            array('project_id, create_user_id, update_user_id', 'unsafe', 'on' => 'insert,update'),
         );
     }
 

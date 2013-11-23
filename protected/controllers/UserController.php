@@ -6,6 +6,7 @@ class UserController extends Controller{
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
+    public $defaultAction = 'admin';
 
     /**
      * @var User property containing the associated User model instance.
@@ -34,7 +35,7 @@ class UserController extends Controller{
 
         return array(
             array('allow', // allow authenticated user to perform 'index', 'create' actions
-                'actions' => array('index', 'create'),
+                'actions' => array('index', 'admin', 'create'),
                 'users' => array('@'),
             ),
             array('allow', // allow authenticated user to perform 'update' and 'view' action for their acc
@@ -43,7 +44,7 @@ class UserController extends Controller{
                 'expression' => "Yii::app()->user->id==$modelId OR Yii::app()->user->name==Yii::app()->params['God']",
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
+                'actions' => array('delete'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -70,7 +71,7 @@ class UserController extends Controller{
         $model = new User;
 
         // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
@@ -80,6 +81,7 @@ class UserController extends Controller{
 
         $this->render('create', array(
             'model' => $model,
+            'flag' => 'create',
         ));
     }
 
@@ -90,9 +92,11 @@ class UserController extends Controller{
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $model->oldPassword = $model->password;
+        $model->password = '';
 
         // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
