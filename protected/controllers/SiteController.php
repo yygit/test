@@ -1,6 +1,22 @@
 <?php
 
 class SiteController extends Controller{
+
+
+    public function filters() {
+        return array(
+            array(
+                'HttpsFilter + contact, captcha', // send message only thru HTTPS
+                'schema' => 'https',
+            ),
+            array(
+                'HttpsFilter - contact, captcha', // the rest is only thru HTTP
+                'schema' => 'http',
+            ),
+        );
+    }
+
+
     /**
      * Declares class-based actions.
      */
@@ -46,6 +62,13 @@ class SiteController extends Controller{
      */
     public function actionContact() {
         $model = new ContactForm;
+
+        // if it is ajax validation request
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'contact-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+
         if (isset($_POST['ContactForm'])) {
             $model->attributes = $_POST['ContactForm'];
             if ($model->validate()) {

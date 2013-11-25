@@ -14,3 +14,5 @@
     <li>YiiBase::$_aliases <?php var_dump(YiiBase::$_aliases); ?></li>
 </ul>
 
+<?php var_dump(Yii::app()->request->getHostInfo()); ?>
+<?php var_dump(Yii::app()->request->getIsSecureConnection()); ?>

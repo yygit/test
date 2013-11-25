@@ -22,6 +22,15 @@ class ProjectController extends Controller{
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
             'userContext + create,update', //check to ensure valid user context
+            array(
+                'HttpsFilter + update', // update only thru HTTPS
+                'schema'=>'https',
+            ),
+            array(
+                'HttpsFilter - update', // the rest is only thru HTTP
+                'schema'=>'http',
+            ),
+
         );
     }
 

@@ -51,9 +51,9 @@ $this->breadcrumbs = array(
 
         <div class="row">
             <?php echo $form->labelEx($model, 'subject'); ?>
-            <?php /*echo $form->textField($model, 'subject', array('size' => 60, 'maxlength' => 128)); */ ?>
+            <?php echo $form->textField($model, 'subject', array('size' => 60, 'maxlength' => 128));  ?>
             <?php
-                $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+            /* $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                     'model' => $model,
                     'attribute' => 'subject',
                     'sourceUrl' => Yii::app()->createUrl('site/getPageTitlesAr'),
@@ -62,7 +62,7 @@ $this->breadcrumbs = array(
                         'type' => 'get',
                     ),
                 ));
-            ?>
+            */?>
             <?php echo $form->error($model, 'subject'); ?>
         </div>
 

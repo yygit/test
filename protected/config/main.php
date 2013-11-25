@@ -78,11 +78,13 @@ return array(
              'enableCookieValidation'=>true,
              'enableCsrfValidation'=>true,
         ),*/
-
-        /* 'authManager'=>array(
-            'class'=>'CDbAuthManager',
-            'connectionID'=>'db',
-        ), */
+        'authManager' => array(
+            'class' => 'CDbAuthManager',
+            'connectionID' => 'db',
+            'itemTable' => 'tbl_auth_item',
+            'itemChildTable' => 'tbl_auth_item_child',
+            'assignmentTable' => 'tbl_auth_assignment',
+        ),
         /*'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',
             'responsiveCss' => true,
