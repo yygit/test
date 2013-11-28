@@ -19,7 +19,7 @@
  * @property User $users array of User models type AR
  * @method array() assignedUsers() defined in scopes()
  */
-class Project extends TrackStarAR {
+class Project extends TrackStarAR{
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -113,7 +113,7 @@ class Project extends TrackStarAR {
         return $usersArray;
     }
 
-    public function behaviors(){
+    public function behaviors() {
         return array(
             'CTimestampBehavior' => array(
                 'class' => 'zii.behaviors.CTimestampBehavior',
@@ -141,7 +141,7 @@ class Project extends TrackStarAR {
                 $names .= print_r($v->attributes, true);
             $names .= ', ';
         }
-        return CHtml::encode(rtrim($names,', '));
+        return CHtml::encode(rtrim($names, ', '));
     }
 
     /**
@@ -151,7 +151,7 @@ class Project extends TrackStarAR {
      * @param null|string $attr
      * @return array
      */
-    public static function listRelatedAttr ($model, $relation = 'users', $attr = null) {
+    public static function listRelatedAttr($model, $relation = 'users', $attr = null) {
         $ids = array();
         if (empty($model->$relation)) return $ids;
         foreach ($model->$relation as $v) {
@@ -175,8 +175,66 @@ class Project extends TrackStarAR {
 
         return array(
             'assignedUsers' => array(
-                'join'=>'JOIN '.ProjectUserAssignment::tableName().' t1 ON t1.project_id=t.id AND t1.user_id='. $user->id,
+                'join' => 'JOIN ' . ProjectUserAssignment::tableName() . ' t1 ON t1.project_id=t.id AND t1.user_id=' . $user->id,
             )
         );
     }
+
+    /**
+     * Assigns a user, in a specific role, to the project
+     * @param int $userId the primary key for the user
+     * @param string $role the role assigned to the user for the project
+     * @return boolean
+     */
+    public function assignUser($userId, $role) {
+        $command = Yii::app()->db->createCommand();
+        return (boolean)$command->insert('tbl_project_user_assignment', array(
+            'role' => $role,
+            'user_id' => $userId,
+            'project_id' => $this->id,
+        ));
+    }
+
+    /**
+     * Removes a user from being associated with the project
+     * @param int $userId the primary key for the user
+     */
+    public function removeUser($userId) {
+        $command = Yii::app()->db->createCommand();
+        return (boolean)$command->delete('tbl_project_user_assignment', 'user_id=:userId AND project_id=:projectId', array(':userId' => $userId, ':projectId' => $this->id));
+    }
+
+    /**
+     * Determines whether or not the current application user is in the role for the project
+     * @param string $role the role assigned to the user for the project
+     * @return boolean whether or not the user is in the role for this project
+     */
+    public function allowCurrentUser($role) {
+        $sql = "SELECT * FROM tbl_project_user_assignment WHERE project_id=:projectId AND user_id=:userId AND role=:role";
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(":projectId", $this->id, PDO::PARAM_INT);
+        $command->bindValue(":userId", Yii::app()->user->getId(), PDO::PARAM_INT);
+        $command->bindValue(":role", $role, PDO::PARAM_STR);
+        return $command->execute() == 1 ? true : false;
+    }
+
+    /**
+     * Returns an array of available roles in which a user can be placed when being added to a project
+     */
+    public static function getUserRoleOptions() {
+        return CHtml::listData(Yii::app()->authManager->getRoles(), 'name', 'name');
+    }
+
+    /**
+     * Determines whether or not a user is already part of a project
+     */
+    public function isUserInProject($user) {
+        $sql = "SELECT user_id FROM tbl_project_user_assignment WHERE project_id=:projectId AND user_id=:userId";
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(":projectId", $this->id, PDO::PARAM_INT);
+        $command->bindValue(":userId", $user->id, PDO::PARAM_INT);
+        return $command->execute() == 1;
+    }
+
+
 }

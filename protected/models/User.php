@@ -19,7 +19,7 @@
  * @property TblIssue[] $tblIssues1
  * @property TblProject[] $tblProjects
  * @property TblProject[] $tblProjects1
- * @property TblProject[] $tblProjects2
+ * @property Project $userProjects
  *
  * @method array() myself() defined in @link self::scopes()
  *
@@ -76,7 +76,7 @@ class User extends TrackStarAR{
             'tblIssues1' => array(self::HAS_MANY, 'TblIssue', 'owner_id'),
             'tblProjects' => array(self::HAS_MANY, 'TblProject', 'update_user_id'),
             'tblProjects1' => array(self::HAS_MANY, 'TblProject', 'create_user_id'),
-            'tblProjects2' => array(self::MANY_MANY, 'TblProject', 'tbl_project_user_assignment(user_id, project_id)'),
+            'userProjects' => array(self::MANY_MANY, 'TblProject', 'tbl_project_user_assignment(user_id, project_id)'),
         );
     }
 

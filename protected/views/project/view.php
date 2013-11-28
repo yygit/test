@@ -15,9 +15,21 @@ $this->menu = array(
     array('label' => 'Manage Project', 'url' => array('admin')),
     array('label' => 'Create Issue', 'url' => array('issue/create', 'pid' => $model->id)),
 );
+if (Yii::app()->user->checkAccess('createUser', array('project' => $model))) {
+    $this->menu[] = array('label' => 'Add User To Project', 'url' => array('adduser', 'id' => $model->id));
+}
+if (Yii::app()->user->checkAccess('deleteUser', array('project' => $model))) {
+    $this->menu[] = array('label' => 'Revoke User From Project', 'url' => array('deleteuser', 'id' => $model->id));
+}
 ?>
 
 <h1>View Project #<?php echo $model->id; ?></h1>
+
+<?php if(Yii::app()->user->hasFlash('success')):?>
+    <div class="flash-success">
+        <?php echo Yii::app()->user->getFlash('success'); ?>
+    </div>
+<?php endif; ?>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,

@@ -79,7 +79,8 @@ return array(
              'enableCsrfValidation'=>true,
         ),*/
         'authManager' => array(
-            'class' => 'CDbAuthManager',
+//            'class' => 'CDbAuthManager',
+            'class' => 'MyCDbAuthManager',
             'connectionID' => 'db',
             'itemTable' => 'tbl_auth_item',
             'itemChildTable' => 'tbl_auth_item_child',

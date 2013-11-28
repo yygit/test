@@ -27,7 +27,8 @@ $this->menu=array(
 //		'project_id',
         array(
             'name'=>'project_id',
-            'value'=>'#'.$model->project_id.' ('.CHtml::encode($model->project->name).')',
+            'value'=>'#'.$model->project_id.' ('.CHtml::link(CHtml::encode($model->project->name), array('project/view', 'id'=>$model->project_id)).')',
+            'type'=>'html',
         ),
 //		'type_id',
         array(

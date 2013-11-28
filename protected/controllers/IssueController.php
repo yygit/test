@@ -40,17 +40,17 @@ class IssueController extends Controller{
 
         return array(
             array('allow', // allow
-                'actions' => array('index', 'admin', 'create'),
+                'actions' => array('create', 'delete'),
                 'users' => array('@'),
             ),
             array('allow', // allow
                 'actions' => array('update', 'view'),
                 'users' => array('@'),
-                'expression' => "Yii::app()->user->id==$ownerId OR Yii::app()->user->name==Yii::app()->params['God']",
+//                'expression' => "Yii::app()->user->id==$ownerId OR Yii::app()->user->name==Yii::app()->params['God']",
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('delete'),
-                'users' => array('admin'),
+                'actions' => array('index', 'admin'),
+                'users' => array(Yii::app()->params['God']),
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -63,6 +63,9 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        if (!Yii::app()->user->checkAccess('readIssue', array('project' => $this->_project))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
@@ -73,6 +76,9 @@ class IssueController extends Controller{
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+        if (!Yii::app()->user->checkAccess('createIssue', array('project' => $this->_project))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $model = new Issue;
         $model->project_id = $this->_project->id;
 
@@ -96,6 +102,9 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
+        if (!Yii::app()->user->checkAccess('updateIssue', array('project' => $this->_project))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
@@ -118,6 +127,9 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
+        if (!Yii::app()->user->checkAccess('deleteIssue', array('project' => $this->_project))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

@@ -13,7 +13,6 @@ class ProjectController extends Controller{
      */
     public $_userId = null;
 
-
     /**
      * @return array action filters
      */
@@ -24,13 +23,12 @@ class ProjectController extends Controller{
             'userContext + create,update', //check to ensure valid user context
             array(
                 'HttpsFilter + update', // update only thru HTTPS
-                'schema'=>'https',
+                'schema' => 'https',
             ),
             array(
                 'HttpsFilter - update', // the rest is only thru HTTP
-                'schema'=>'http',
+                'schema' => 'http',
             ),
-
         );
     }
 
@@ -46,17 +44,17 @@ class ProjectController extends Controller{
 
         return array(
             array('allow', // allow
-                'actions' => array('index', 'admin', 'create'),
+                'actions' => array('index', 'admin', 'delete', 'adduser', 'deleteuser'),
                 'users' => array('@'),
             ),
             array('allow', // allow
-                'actions' => array('view', 'update'),
+                'actions' => array('update', 'view'),
                 'users' => array('@'),
-                'expression' => "$allow OR Yii::app()->user->name==Yii::app()->params['God']",
+//                'expression' => "$allow OR Yii::app()->user->name==Yii::app()->params['God']",
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('delete'),
-                'users' => array('admin'),
+                'actions' => array('create'), // only 'God' users may currently create projects
+                'users' => array(Yii::app()->params['God']),
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -69,6 +67,9 @@ class ProjectController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        if (!Yii::app()->user->checkAccess('readProject', array('project' => $this->loadModel($id)))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $issueDataProvider = new CActiveDataProvider('Issue', array(
             'criteria' => array(
                 'condition' => 'project_id=:projectId',
@@ -116,8 +117,14 @@ class ProjectController extends Controller{
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
 
+        if (!Yii::app()->user->checkAccess('updateProject', array('project' => $model))) {
+            /*// causes infinite loops if 'HttpsFilter' is on, may help redirecting to another action throwing error in http
+            throw new CHttpException(403, 'You are not authorized to perform this action.');*/
+            exit('You are not authorized to perform this action.');
+        }
+
         // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['Project'])) {
             $model->attributes = $_POST['Project'];
@@ -136,6 +143,9 @@ class ProjectController extends Controller{
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
+        if (!Yii::app()->user->checkAccess('deleteProject', array('project' => $this->loadModel($id)))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -189,8 +199,8 @@ class ProjectController extends Controller{
      * Performs the AJAX validation.
      * @param Project $model the model to be validated
      */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'project-form') {
+    protected function performAjaxValidation($model, $id = 'project-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === $id) {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
@@ -219,6 +229,67 @@ class ProjectController extends Controller{
 
         //complete the running of other filters and execute the requested action
         $filterChain->run();
+    }
+
+    /**
+     * Provides a form so that project administrators can
+     * associate other users to the project
+     */
+    public function actionAdduser($id) {
+        $project = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('createUser', array('project' => $project))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
+
+        $form = new ProjectUserForm('insert');
+        $form->project = $project;
+
+        // Uncomment the following line if AJAX validation is needed
+        $this->performAjaxValidation($form, 'adduser-form');
+
+        // collect user input data
+        if (isset($_POST['ProjectUserForm'])) {
+            $form->attributes = $_POST['ProjectUserForm'];
+            // validate user input
+            if ($form->validate()) {
+                if ($form->assign()) {
+                    Yii::app()->user->setFlash('success', 'user "' . $form->username . '" has been added to the project as "' . $form->role . '"');
+                    $form->clearErrors();
+                    $this->redirect(array('view', 'id' => $project->id));
+                }
+            }
+        }
+        $this->render('adduser', array('model' => $form));
+    }
+
+    /**
+     * remove user association from the project
+     */
+    public function actionDeleteuser($id) {
+        $project = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('deleteUser', array('project' => $project))) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
+
+        $form = new ProjectUserForm('actionDeleteuser');
+        $form->project = $project;
+
+        // Uncomment the following line if AJAX validation is needed
+        $this->performAjaxValidation($form, 'deleteuser-form');
+
+        // collect user input data
+        if (isset($_POST['ProjectUserForm'])) {
+            $form->attributes = $_POST['ProjectUserForm'];
+            // validate user input
+            if ($form->validate()) {
+                if ($form->disAssign()) {
+                    Yii::app()->user->setFlash('success', 'user "' . $form->username . '" has been revoked from this project');
+                    $form->clearErrors();
+                    $this->redirect(array('view', 'id' => $project->id));
+                }
+            }
+        }
+        $this->render('deleteuser', array('model' => $form));
     }
 
 
