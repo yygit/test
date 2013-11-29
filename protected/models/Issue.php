@@ -22,6 +22,7 @@
  * @property User $owner
  * @property Project $project
  * @method array owners() defined in scopes()
+ * @method array assignedUsers() defined in scopes()
  */
 class Issue extends TrackStarAR {
 
@@ -209,12 +210,16 @@ class Issue extends TrackStarAR {
         if (empty($user->id) OR empty($user->name) OR $user->name === Yii::app()->params['God'])
             return array(
                 'owners' => array(),
+                'assignedUsers' => array(),
             );
 
         return array(
             'owners' => array(
                 'condition'=>'t.owner_id='. $user->id,
-            )
+            ),
+            'assignedUsers' => array(
+                'join' => 'JOIN ' . ProjectUserAssignment::tableName() . ' t1 ON t1.project_id=t.project_id AND t1.user_id=' . $user->id,
+            ),
         );
     }
 

@@ -69,11 +69,14 @@ class ProjectUserForm extends CFormModel{
 
             $tr1 = Yii::app()->db->beginTransaction();
             $assignUser = $this->project->assignUser($this->_user->id, $this->role); //assign the user, in the specified role, to the project
-            $auth = Yii::app()->authManager;
-            $bizRule = 'return isset($params["project"]) && $params["project"]->allowCurrentUser("' . $this->role . '");';
 
             $tr2 = Yii::app()->db->beginTransaction();
-            $assign = $auth->assign($this->role, $this->_user->id, $bizRule); //add the association, along with the RBAC biz rule, to our RBAC hierarchy
+            $auth = Yii::app()->authManager;
+            $bizRule = 'return isset($params["project"]) && $params["project"]->allowCurrentUser("' . $this->role . '");';
+            if ($auth->getAuthAssignment($this->role, $this->_user->id))
+                $assign = true; // do not add auth assignment if one is already present
+            else
+                $assign = $auth->assign($this->role, $this->_user->id, $bizRule); //add the association, along with the RBAC biz rule, to our RBAC hierarchy
             if (!$assignUser or !$assign)
                 throw new CException('DB insert or Auth assign failed');
 
@@ -95,12 +98,15 @@ class ProjectUserForm extends CFormModel{
         if ($this->_user instanceof User) {
 
             $tr1 = Yii::app()->db->beginTransaction();
+            $role = $this->project->getProjectUserRole($this->_user->id);
             $removeUser = $this->project->removeUser($this->_user->id); // dis-assign the user from the project
-            $auth = Yii::app()->authManager;
-            $role = end(array_keys(Yii::app()->authManager->getAuthAssignments($this->_user->id)));
 
             $tr2 = Yii::app()->db->beginTransaction();
-            $revoke = $auth->revoke($role, $this->_user->id); // remove auth association, along with the RBAC biz rule from the RBAC hierarchy
+            $auth = Yii::app()->authManager;
+            if ($this->project->sameRoleLeft($this->_user->id, $role, 0))
+                $revoke = true; // do not revoke if same role remains for another project
+            else
+                $revoke = $auth->revoke($role, $this->_user->id); // remove auth association, along with the RBAC biz rule from the RBAC hierarchy
             if (!$revoke or !$removeUser)
                 throw new CException('DB removal or Auth revocation failed');
 

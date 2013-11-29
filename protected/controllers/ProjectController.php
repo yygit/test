@@ -68,13 +68,14 @@ class ProjectController extends Controller{
      */
     public function actionView($id) {
         if (!Yii::app()->user->checkAccess('readProject', array('project' => $this->loadModel($id)))) {
-            throw new CHttpException(403, 'You are not authorized to perform this action.');
+            throw new CHttpException(403, 'You are not authorized to perform this action!');
         }
         $issueDataProvider = new CActiveDataProvider('Issue', array(
             'criteria' => array(
-                'condition' => 'project_id=:projectId',
+                'condition' => 't.project_id=:projectId',
                 'params' => array(':projectId' => $this->loadModel($id)->id),
-                'scopes' => array('owners'),
+//                'scopes' => array('owners'),
+                'scopes' => array('assignedUsers'),
             ),
             'pagination' => array(
                 'pageSize' => 5,
@@ -157,6 +158,9 @@ class ProjectController extends Controller{
      * Lists all models.
      */
     public function actionIndex() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $dataProvider = new CActiveDataProvider('Project');
         $dataProvider->criteria = array(
             'scopes' => array('assignedUsers'),
@@ -170,6 +174,9 @@ class ProjectController extends Controller{
      * Manages all models.
      */
     public function actionAdmin() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $model = new Project('search');
         $model->assignedUsers(); // list only projects having currently auth user among the assigned users
         $model->unsetAttributes(); // clear any default values

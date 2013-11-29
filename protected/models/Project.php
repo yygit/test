@@ -218,6 +218,27 @@ class Project extends TrackStarAR{
         return $command->execute() == 1 ? true : false;
     }
 
+    /** get user role for the given project
+     * @param $userId int
+     * @return string|null
+     */
+    public function getProjectUserRole($userId) {
+        $sql = "SELECT role FROM tbl_project_user_assignment WHERE project_id=:projectId AND user_id=:userId";
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(":projectId", $this->id, PDO::PARAM_INT);
+        $command->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $r = $command->queryRow();
+        return !empty($r) ? reset($command->queryRow()) : null;
+    }
+
+    public function sameRoleLeft($userId, $role, $count=0) {
+        $sql = "SELECT * FROM tbl_project_user_assignment WHERE user_id=:userId AND role=:role";
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $command->bindValue(":role", $role, PDO::PARAM_STR);
+        return ($command->execute() > $count) ? true : false;
+    }
+
     /**
      * Returns an array of available roles in which a user can be placed when being added to a project
      */

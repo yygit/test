@@ -43,9 +43,9 @@ class UserController extends Controller{
                 'users' => array('@'),
                 'expression' => "Yii::app()->user->id==$modelId OR Yii::app()->user->name==Yii::app()->params['God']",
             ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
+            array('allow', // allow
                 'actions' => array('delete'),
-                'users' => array('admin'),
+                'users' => array(Yii::app()->params['God']),
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -58,6 +58,9 @@ class UserController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('member', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
@@ -68,6 +71,9 @@ class UserController extends Controller{
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $model = new User;
 
         // Uncomment the following line if AJAX validation is needed
@@ -91,6 +97,9 @@ class UserController extends Controller{
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $model = $this->loadModel($id);
         $model->oldPassword = $model->password;
         $model->password = '';
@@ -115,6 +124,9 @@ class UserController extends Controller{
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -126,6 +138,9 @@ class UserController extends Controller{
      * Lists all models.
      */
     public function actionIndex() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $dataProvider = new CActiveDataProvider('User');
         $dataProvider->criteria = array('scopes' => array('myself')); // YY; 20131122; show yourself only (show all to 'God' user)
         $this->render('index', array(
@@ -137,6 +152,9 @@ class UserController extends Controller{
      * Manages all models.
      */
     public function actionAdmin() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $model = new User('search');
         $model->myself();
         $model->unsetAttributes(); // clear any default values

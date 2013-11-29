@@ -39,18 +39,22 @@
     <!-- header -->
 
     <div id="mainmenu">
-        <?php $this->widget('zii.widgets.CMenu', array(
-            'items' => array(
-                array('label' => 'Home', 'url' => array('/'), 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController.'/'.$this->defaultAction ? 'active' : null)),
-                array('label' => 'About', 'url' => array('/site/page', 'view' => 'about')),
-                array('label' => 'Contact', 'url' => array('/site/contact')),
-                array('label' => 'Projects', 'url' => array('/project'), 'itemOptions' => array('class' => $this->id == 'project' ? 'active' : null)),
-                array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)),
-                array('label' => 'Issues', 'url' => array('/issue'), 'itemOptions' => array('class' => $this->id == 'issue' ? 'active' : null)),
-                array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
-                array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
-            ),
-        )); ?>
+        <?php
+        $items = array(
+            array('label' => 'Home', 'url' => array('/'), 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController . '/' . $this->defaultAction ? 'active' : null)),
+            array('label' => 'About', 'url' => array('/site/page', 'view' => 'about')),
+            array('label' => 'Contact', 'url' => array('/site/contact')),
+        );
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id) ? array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)) : null;
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id) ? array('label' => 'Projects', 'url' => array('/project'), 'itemOptions' => array('class' => $this->id == 'project' ? 'active' : null)) : null;
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('readIssue', Yii::app()->user->id) ? array('label' => 'Issues', 'url' => array('/issue'), 'itemOptions' => array('class' => $this->id == 'issue' ? 'active' : null)) : null;
+        $items[] = array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest);
+        $items[] = array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest);
+
+        $this->widget('zii.widgets.CMenu', array(
+            'items' => array_values($items),
+        ));
+        ?>
     </div>
     <!-- mainmenu -->
     <?php if (isset($this->breadcrumbs)): ?>

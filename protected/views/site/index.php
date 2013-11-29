@@ -1,7 +1,7 @@
 <?php $this->pageTitle = Yii::app()->name; ?>
 
 <h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
-<?php if (!Yii::app()->user->isGuest):?>
+<?php if (!Yii::app()->user->isGuest): ?>
     <p>
         You last logged in on <b><?php echo Yii::app()->user->lastLogin; ?></b>.
     </p>
@@ -14,5 +14,6 @@
     <li>YiiBase::$_aliases <?php var_dump(YiiBase::$_aliases); ?></li>
 </ul>
 
-<?php var_dump(Yii::app()->request->getHostInfo()); ?>
-<?php var_dump(Yii::app()->request->getIsSecureConnection()); ?>
+<?php
+var_dump(Yii::app()->authManager->checkAccessNoBizrule('createProject','1'));
+?>

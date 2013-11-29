@@ -40,7 +40,7 @@ class IssueController extends Controller{
 
         return array(
             array('allow', // allow
-                'actions' => array('create', 'delete'),
+                'actions' => array('create', 'delete', 'index', 'admin'),
                 'users' => array('@'),
             ),
             array('allow', // allow
@@ -48,10 +48,10 @@ class IssueController extends Controller{
                 'users' => array('@'),
 //                'expression' => "Yii::app()->user->id==$ownerId OR Yii::app()->user->name==Yii::app()->params['God']",
             ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
+            /*array('allow', // allow admin only
                 'actions' => array('index', 'admin'),
                 'users' => array(Yii::app()->params['God']),
-            ),
+            ),*/
             array('deny', // deny all users
                 'users' => array('*'),
             ),
@@ -63,11 +63,12 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        if (!Yii::app()->user->checkAccess('readIssue', array('project' => $this->_project))) {
+        $model = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('readIssue', array('project' => $model->project))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $this->render('view', array(
-            'model' => $this->loadModel($id),
+            'model' => $model,
         ));
     }
 
@@ -102,10 +103,10 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        if (!Yii::app()->user->checkAccess('updateIssue', array('project' => $this->_project))) {
+        $model = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('updateIssue', array('project' => $model->project))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
-        $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -127,10 +128,11 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (!Yii::app()->user->checkAccess('deleteIssue', array('project' => $this->_project))) {
+        $model = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('deleteIssue', array('project' => $model->project))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
-        $this->loadModel($id)->delete();
+        $model->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
@@ -141,9 +143,13 @@ class IssueController extends Controller{
      * Lists all models.
      */
     public function actionIndex() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readIssue', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $dataProvider = new CActiveDataProvider('Issue');
         $dataProvider->criteria = array(
-            'scopes' => array('owners'),
+//            'scopes' => array('owners'),
+            'scopes' => array('assignedUsers'),
         );
         $this->render('index', array(
             'dataProvider' => $dataProvider,
@@ -154,8 +160,12 @@ class IssueController extends Controller{
      * Manages all models.
      */
     public function actionAdmin() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readIssue', Yii::app()->user->id)) {
+            throw new CHttpException(403, 'You are not authorized to perform this action.');
+        }
         $model = new Issue('search');
-        $model->owners();
+//        $model->owners();
+        $model->assignedUsers();
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['Issue']))
             $model->attributes = $_GET['Issue'];

@@ -17,11 +17,6 @@ $this->menu = array(
     </div>
 <?php endif; ?>
 
-<?php
-/*var_dump(Yii::app()->authManager->getAuthAssignment('owner','1'));
-Yii::app()->end();
-*/?>
-
 <div class="form">
     <?php $form = $this->beginWidget('CActiveForm', array(
         'id' => 'deleteuser-form',
