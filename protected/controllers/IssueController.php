@@ -40,7 +40,7 @@ class IssueController extends Controller{
 
         return array(
             array('allow', // allow
-                'actions' => array('create', 'delete', 'index', 'admin'),
+                'actions' => array('create', 'delete', 'index', 'admin', 'ajaxcomment'),
                 'users' => array('@'),
             ),
             array('allow', // allow
@@ -63,12 +63,14 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $model = $this->loadModel($id);
-        if (!Yii::app()->user->checkAccess('readIssue', array('project' => $model->project))) {
+        $issue = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('readIssue', array('project' => $issue->project))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
+        $comment = $this->createComment($issue);
         $this->render('view', array(
-            'model' => $model,
+            'model' => $issue,
+            'comment' => $comment,
         ));
     }
 
@@ -193,8 +195,8 @@ class IssueController extends Controller{
      * Performs the AJAX validation.
      * @param Issue $model the model to be validated
      */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'issue-form') {
+    protected function performAjaxValidation($model, $id = 'issue-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === $id) {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
@@ -254,6 +256,47 @@ class IssueController extends Controller{
 
         //complete the running of other filters and execute the requested action
         $filterChain->run();
+    }
+
+    /**
+     * Creates a new comment on an issue
+     * @param Issue $issue
+     * @return Comment
+     */
+    protected function createComment(Issue $issue) {
+        $comment = new Comment;
+        if (isset($_POST['Comment'])) {
+            $comment->attributes = $_POST['Comment'];
+            if ($issue->addComment($comment)) {
+                Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added.");
+                $this->refresh();
+            }
+        }
+        return $comment;
+    }
+
+
+    public function actionAjaxcomment() {
+        $id = Yii::app()->request->getPost('id');
+        if (empty($id)) throw new CHttpException(500, 'request invalid', 1);
+        $issue = $this->loadModel($id);
+        $comment = new Comment;
+        if (isset($_POST['Comment'])) {
+
+            $comment->attributes = $_POST['Comment'];
+            if ($issue->addComment($comment)) {
+                Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added via Ajax.");
+            }
+
+//            echo CActiveForm::validate($comment);
+
+            $this->renderPartial('__comments', array(
+                'model' => $issue,
+                'comment' => $comment,
+            ));
+
+//            Yii::app()->end();
+        }
     }
 
 }

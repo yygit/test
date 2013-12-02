@@ -5,38 +5,40 @@
 
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->name), array('issue/view', 'id'=>$data->id)); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
+    <?php echo CHtml::link(CHtml::encode($data->name), array('issue/view', 'id' => $data->id)); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::encode($data->id); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
+    <?php echo CHtml::encode($data->id); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
-	<?php echo CHtml::encode($data->description); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
+    <?php /*echo CHtml::encode($data->description); */ ?>
+    <span
+        title='<?php echo CHtml::encode($data->description); ?>'><?php echo CHtml::encode(substr(strip_tags($data->description), 0, 70)); ?></span>
+    <br/>
 
-	<!--<b><?php /*echo CHtml::encode($data->getAttributeLabel('project_id')); */?>:</b>
+    <!--<b><?php /*echo CHtml::encode($data->getAttributeLabel('project_id')); */?>:</b>
 	<?php /*echo CHtml::encode($data->project_id); */?>
 	<br />-->
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('type_id')); ?>:</b>
-	<?php /*echo CHtml::encode($data->type_id); */?>
-	<?php echo CHtml::encode($data->getTypeText()); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('type_id')); ?>:</b>
+    <?php /*echo CHtml::encode($data->type_id); */ ?>
+    <?php echo CHtml::encode($data->getTypeText()); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('status_id')); ?>:</b>
-	<?php /*echo CHtml::encode($data->status_id); */?>
-	<?php echo CHtml::encode($data->getStatusText()); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('status_id')); ?>:</b>
+    <?php /*echo CHtml::encode($data->status_id); */ ?>
+    <?php echo CHtml::encode($data->getStatusText()); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('owner_id')); ?>:</b>
-	<?php /*echo CHtml::encode($data->owner_id); */?>
-	<?php echo CHtml::encode($data->owner->username); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('owner_id')); ?>:</b>
+    <?php /*echo CHtml::encode($data->owner_id); */ ?>
+    <?php echo CHtml::encode($data->owner->username); ?>
+    <br/>
 
-	<?php /*
+    <?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('requester_id')); ?>:</b>
 	<?php echo CHtml::encode($data->requester_id); ?>
 	<br />
@@ -57,6 +59,7 @@
 	<?php echo CHtml::encode($data->update_user_id); ?>
 	<br />
 
-	*/ ?>
+	*/
+    ?>
 
 </div>

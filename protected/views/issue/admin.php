@@ -47,7 +47,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'name',
-		'description',
+//		'description:html',
+        array(
+            'name'=>'description',
+            'value'=>'substr(strip_tags($data->description), 0, 70)',
+        ),
 		'project_id',
 		'type_id',
 		'status_id',

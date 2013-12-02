@@ -1,66 +1,89 @@
 <?php
 /* @var $this IssueController */
 /* @var $model Issue */
+/* @var $comment Comment */
 
-$this->breadcrumbs=array(
-	'Issues'=>array('index'),
-	$model->name,
+$this->breadcrumbs = array(
+    'Issues' => array('index'),
+    $model->name,
 );
 
-$this->menu=array(
-	array('label'=>'List Issue', 'url'=>array('index')),
-	/*array('label'=>'Create Issue', 'url'=>array('create')),*/
-	array('label'=>'Update Issue', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Issue', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Issue', 'url'=>array('admin')),
+$this->menu = array(
+    array('label' => 'List Issue', 'url' => array('index')),
+    /*array('label'=>'Create Issue', 'url'=>array('create')),*/
+    array('label' => 'Update Issue', 'url' => array('update', 'id' => $model->id)),
+    array('label' => 'Delete Issue', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
+    array('label' => 'Manage Issue', 'url' => array('admin')),
 );
 ?>
 
 <h1>View Issue #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'name',
-		'description',
+    'data' => $model,
+    'attributes' => array(
+        'id',
+        'name:html',
+        'description:html',
 //		'project_id',
         array(
-            'name'=>'project_id',
-            'value'=>'#'.$model->project_id.' ('.CHtml::link(CHtml::encode($model->project->name), array('project/view', 'id'=>$model->project_id)).')',
-            'type'=>'html',
+            'name' => 'project_id',
+            'value' => '#' . $model->project_id . ' (' . CHtml::link(CHtml::encode($model->project->name), array('project/view', 'id' => $model->project_id)) . ')',
+            'type' => 'html',
         ),
-//		'type_id',
         array(
-            'name'=>'type_id',
-            'value'=>CHtml::encode($model->getTypeText()),
+            'name' => 'type_id',
+            'value' => CHtml::encode($model->getTypeText()),
         ),
-//		'status_id',
         array(
-            'name'=>'status_id',
-            'value'=>CHtml::encode($model->getStatusText()),
+            'name' => 'status_id',
+            'value' => CHtml::encode($model->getStatusText()),
         ),
-//		'owner_id',
         array(
-            'name'=>'owner_id',
-            'value'=>isset($model->owner)?CHtml::encode($model->owner->username):"unknown"
+            'name' => 'owner_id',
+            'value' => isset($model->owner) ? CHtml::encode($model->owner->username) : "unknown"
         ),
-//        'requester_id',
         array(
-            'name'=>'requester_id',
-            'value'=>isset($model->requester)?CHtml::encode($model->requester->username):"unknown"
+            'name' => 'requester_id',
+            'value' => isset($model->requester) ? CHtml::encode($model->requester->username) : "unknown"
         ),
-		'create_time',
-//		'create_user_id',
+        'create_time',
         array(
-            'name'=>'create_user_id',
-            'value'=>isset($model->creator)?CHtml::encode($model->creator->username):"unknown"
+            'name' => 'create_user_id',
+            'value' => isset($model->creator) ? CHtml::encode($model->creator->username) : "unknown"
         ),
-		'update_time',
-//		'update_user_id',
+        'update_time',
         array(
-            'name'=>'update_user_id',
-            'value'=>isset($model->updator)?CHtml::encode($model->updator->username):"unknown"
+            'name' => 'update_user_id',
+            'value' => isset($model->updator) ? CHtml::encode($model->updator->username) : "unknown"
         ),
-	),
+    ),
 )); ?>
+
+<div id="comments">
+    <div id='ajaxcomments'>
+        <?php if ($model->commentCount >= 1): ?>
+            <h3>
+                <?php echo $model->commentCount > 1 ? $model->commentCount . ' comments' : '1 comment'; ?>
+            </h3>
+
+            <?php $this->renderPartial('_comments', array(
+                'comments' => $model->comments,
+            )); ?>
+        <?php endif; ?>
+    </div>
+    <h3>Leave a Comment</h3>
+
+    <?php if (Yii::app()->user->hasFlash('commentSubmitted')): ?>
+        <div class="flash-success">
+            <?php echo Yii::app()->user->getFlash('commentSubmitted'); ?>
+        </div>
+    <?php endif; ?>
+    <?php $this->renderPartial('/comment/_form', array(
+        'model' => $comment,
+        'issueId' => $model->id, // for ajax button
+    )); ?>
+
+</div>
+
+<!--<div id='ajaxcomments'></div>-->

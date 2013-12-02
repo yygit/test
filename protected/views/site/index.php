@@ -15,5 +15,5 @@
 </ul>
 
 <?php
-var_dump(Yii::app()->authManager->checkAccessNoBizrule('createProject','1'));
+//var_dump(Yii::app()->authManager->checkAccessNoBizrule('createProject','1'));
 ?>

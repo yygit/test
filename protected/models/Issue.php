@@ -24,7 +24,7 @@
  * @method array owners() defined in scopes()
  * @method array assignedUsers() defined in scopes()
  */
-class Issue extends TrackStarAR {
+class Issue extends TrackStarAR{
 
     const TYPE_BUG = 0;
     const TYPE_FEATURE = 1;
@@ -58,10 +58,12 @@ class Issue extends TrackStarAR {
         // will receive user inputs.
         return array(
             array('name', 'required'),
+            array('name', 'filter', 'filter' => 'strip_tags'),
+            array('name', 'filter', 'filter' => 'trim'),
             array('project_id, type_id, status_id, owner_id, requester_id, create_user_id, update_user_id', 'numerical', 'integerOnly' => true),
-            array('type_id', 'in', 'range'=>self::getAllowedTypeRange()),
-            array('status_id', 'in', 'range'=>self::getAllowedStatusRange()),
-            array('owner_id', 'in', 'range'=>Project::listRelatedAttr(Project::model()->findByPk($this->project_id),'users','id'), 'on' => 'insert,update'),
+            array('type_id', 'in', 'range' => self::getAllowedTypeRange()),
+            array('status_id', 'in', 'range' => self::getAllowedStatusRange()),
+            array('owner_id', 'in', 'range' => Project::listRelatedAttr(Project::model()->findByPk($this->project_id), 'users', 'id'), 'on' => 'insert,update'),
             array('name', 'length', 'max' => 255),
             array('description, create_time, update_time', 'safe'),
             // The following rule is used by search().
@@ -79,9 +81,11 @@ class Issue extends TrackStarAR {
         return array(
             'requester' => array(self::BELONGS_TO, 'User', 'requester_id'),
             'owner' => array(self::BELONGS_TO, 'User', 'owner_id'),
+            'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
             'creator' => array(self::BELONGS_TO, 'User', 'create_user_id'),
             'updator' => array(self::BELONGS_TO, 'User', 'update_user_id'),
-            'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
+            'comments' => array(self::HAS_MANY, 'Comment', 'issue_id','order'=>'comments.create_time DESC'),
+            'commentCount' => array(self::STAT, 'Comment', 'issue_id'),
         );
     }
 
@@ -191,7 +195,7 @@ class Issue extends TrackStarAR {
         return isset($typeOptions[$this->type_id]) ? $typeOptions[$this->type_id] : "unknown type ({$this->type_id})";
     }
 
-    public function behaviors(){
+    public function behaviors() {
         return array(
             'CTimestampBehavior' => array(
                 'class' => 'zii.behaviors.CTimestampBehavior',
@@ -215,12 +219,22 @@ class Issue extends TrackStarAR {
 
         return array(
             'owners' => array(
-                'condition'=>'t.owner_id='. $user->id,
+                'condition' => 't.owner_id=' . $user->id,
             ),
             'assignedUsers' => array(
                 'join' => 'JOIN ' . ProjectUserAssignment::tableName() . ' t1 ON t1.project_id=t.project_id AND t1.user_id=' . $user->id,
             ),
         );
+    }
+
+    /**
+     * Adds a comment to this issue
+     * @param Comment $comment AR model for issue comment
+     * @return bool
+     */
+    public function addComment(Comment $comment) {
+        $comment->issue_id = $this->id;
+        return $comment->save();
     }
 
 

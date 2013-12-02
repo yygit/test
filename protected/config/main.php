@@ -59,11 +59,15 @@ return array(
         ),
         'log' => array(
             'class' => 'CLogRouter',
-            'routes' => array(
+            'routes' => array_filter(array(
                 array(
                     'class' => 'CFileLogRoute',
                     'levels' => 'error, warning',
                 ),
+                YII_DEBUG ? array(
+                    'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+                    'ipFilters' => array('localhost', '127.0.0.1', '::1'),
+                ) : null,
                 // uncomment the following to show log messages on web pages
                 /*array(
                     'class'=>'CWebLogRoute',
@@ -71,7 +75,7 @@ return array(
                 /*array(
                     'class'=>'CProfileLogRoute',
                 ),*/
-            ),
+            )),
         ),
 
         /*'request'=>array(

@@ -46,8 +46,8 @@ if (Yii::app()->user->checkAccess('deleteUser', array('project' => $model))) {
     'data' => $model,
     'attributes' => array(
         'id',
-        'name',
-        'description',
+        'name:html',
+        'description:html',
         'create_time',
 //		'create_user_id',
         array(

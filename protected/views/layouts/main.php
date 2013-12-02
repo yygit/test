@@ -48,6 +48,7 @@
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id) ? array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)) : null;
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id) ? array('label' => 'Projects', 'url' => array('/project'), 'itemOptions' => array('class' => $this->id == 'project' ? 'active' : null)) : null;
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('readIssue', Yii::app()->user->id) ? array('label' => 'Issues', 'url' => array('/issue'), 'itemOptions' => array('class' => $this->id == 'issue' ? 'active' : null)) : null;
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id) ? array('label' => 'Comments', 'url' => array('/comment'), 'itemOptions' => array('class' => $this->id == 'comment' ? 'active' : null)) : null;
         $items[] = array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest);
         $items[] = array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest);
 

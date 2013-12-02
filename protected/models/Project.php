@@ -44,6 +44,8 @@ class Project extends TrackStarAR{
         // will receive user inputs.
         return array(
             array('name, description', 'required'),
+            array('name', 'filter', 'filter' => 'strip_tags'),
+            array('name', 'filter', 'filter' => 'trim'),
             array('create_user_id, update_user_id', 'numerical', 'integerOnly' => true),
             array('name', 'length', 'max' => 255),
             array('create_time, update_time', 'safe'),
