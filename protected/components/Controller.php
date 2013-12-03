@@ -22,6 +22,22 @@ class Controller extends CController{
 
 
     /**
+     * @return array action filters
+     */
+    public function filters() {
+        return array(
+            array(
+                'HttpsFilter + update, create', // update only thru HTTPS
+                'schema' => 'https',
+            ),
+            array(
+                'HttpsFilter - update, create', // the rest is only thru HTTP
+                'schema' => 'http',
+            ),
+        );
+    }
+
+    /**
      * In-class defined filter method, configured for use in above filters() method
      * It is called before the actionCreate() action method is run in order to ensure a proper request protocol
      */

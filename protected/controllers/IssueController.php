@@ -22,11 +22,12 @@ class IssueController extends Controller{
      * @return array action filters
      */
     public function filters() {
-        return array(
-            'accessControl', // perform access control for CRUD operations
-            'projectContext + create', // check to ensure valid project context
-            'userContext + create,update', // check to ensure valid user context
-        );
+        return CMap::mergeArray(array(
+                'accessControl', // perform access control for CRUD operations
+                'projectContext + create', // check to ensure valid project context
+                'userContext + create,update', // check to ensure valid user context
+            ),
+            parent::filters());
     }
 
     /**
@@ -63,7 +64,7 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $issue = $this->loadModel($id);
+        $issue = $this->loadModel($id,'with comments and author');
         if (!Yii::app()->user->checkAccess('readIssue', array('project' => $issue->project))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
@@ -184,12 +185,21 @@ class IssueController extends Controller{
      * @return Issue the loaded model
      * @throws CHttpException
      */
-    public function loadModel($id) {
-        $model = Issue::model()->findByPk($id);
+    public function loadModel($id, $withComments = false) {
+        if ($withComments)
+            $model = Issue::model()->with(array('comments' => array('with' => 'author')))->findByPk($id);
+        else
+            $model = Issue::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
+    /*public function loadModel_bak($id) {
+        $model = Issue::model()->findByPk($id);
+        if ($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }*/
 
     /**
      * Performs the AJAX validation.
@@ -286,16 +296,16 @@ class IssueController extends Controller{
             $comment->attributes = $_POST['Comment'];
             if ($issue->addComment($comment)) {
                 Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added via Ajax.");
+            } else {
+                echo CActiveForm::validate($comment);
+//                Yii::app()->end();
             }
-
-//            echo CActiveForm::validate($comment);
 
             $this->renderPartial('__comments', array(
                 'model' => $issue,
                 'comment' => $comment,
             ));
 
-//            Yii::app()->end();
         }
     }
 

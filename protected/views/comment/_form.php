@@ -23,7 +23,10 @@
         <?php echo $form->error($model, 'content'); ?>
     </div>
 
-    <?php echo CHtml::hiddenField('id', $issueId); // need this for ajax button ?>
+    <?php
+    if (!empty($issueId))
+        echo CHtml::hiddenField('id', $issueId); // need this for ajax button
+    ?>
 
     <div class="row buttons">
         <?php

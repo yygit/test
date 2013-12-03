@@ -78,3 +78,15 @@ if (Yii::app()->user->checkAccess('deleteUser', array('project' => $model))) {
         'name' => 'Name',
     ),
 )); ?>
+
+
+<?php // comments
+$this->beginWidget('zii.widgets.CPortlet', array(
+    'title' => 'Recent Issue Comments for this Project',
+));
+$this->widget('RecentCommentsWidget', array(
+    'displayLimit' => 3,
+    'projectId' => $model->id,
+));
+$this->endWidget();
+?>

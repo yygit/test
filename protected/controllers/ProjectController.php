@@ -17,19 +17,12 @@ class ProjectController extends Controller{
      * @return array action filters
      */
     public function filters() {
-        return array(
-            'accessControl', // perform access control for CRUD operations
-            'postOnly + delete', // we only allow deletion via POST request
-            'userContext + create,update', //check to ensure valid user context
-            array(
-                'HttpsFilter + update', // update only thru HTTPS
-                'schema' => 'https',
+        return CMap::mergeArray(array(
+                'accessControl', // perform access control for CRUD operations
+                'postOnly + delete', // we only allow deletion via POST request
+                'userContext + create,update', //check to ensure valid user context
             ),
-            array(
-                'HttpsFilter - update', // the rest is only thru HTTP
-                'schema' => 'http',
-            ),
-        );
+            parent::filters());
     }
 
     /**
@@ -74,6 +67,7 @@ class ProjectController extends Controller{
             'criteria' => array(
                 'condition' => 't.project_id=:projectId',
                 'params' => array(':projectId' => $this->loadModel($id)->id),
+                'order' => 't.update_time DESC',
 //                'scopes' => array('owners'),
                 'scopes' => array('assignedUsers'),
             ),

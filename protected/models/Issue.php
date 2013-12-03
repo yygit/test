@@ -21,6 +21,7 @@
  * @property User $requester
  * @property User $owner
  * @property Project $project
+ * @property Comment $comments
  * @method array owners() defined in scopes()
  * @method array assignedUsers() defined in scopes()
  */
