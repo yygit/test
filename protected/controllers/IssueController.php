@@ -64,14 +64,29 @@ class IssueController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $issue = $this->loadModel($id,'with comments and author');
+        $issue = $this->loadModel($id, 'with comments and author');
         if (!Yii::app()->user->checkAccess('readIssue', array('project' => $issue->project))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $comment = $this->createComment($issue);
+
+        $commentDataProvider = new CActiveDataProvider('Comment', array(
+            'criteria' => array(
+                'condition' => 't.issue_id=:issueId',
+                'params' => array(':issueId' => $issue->id),
+            ),
+            'sort' => array(
+                'defaultOrder' => 't.create_time DESC',
+            ),
+            'pagination' => array(
+                'pageSize' => 3,
+            ),
+        ));
+
         $this->render('view', array(
             'model' => $issue,
             'comment' => $comment,
+            'commentDataProvider' => $commentDataProvider,
         ));
     }
 
@@ -180,6 +195,8 @@ class IssueController extends Controller{
 
     /**
      * Returns the data model based on the primary key given in the GET variable.
+     * Cannot specify limit doing 'eager' loading using 'with'. see yiiframework.com/forum/index.php/topic/35586-specifying-limit-in-each-has-many-relations/
+     * Use 'lazy' loading instead - yiiframework.com/forum/index.php/topic/25083-limit-on-relations-in-certain-situations/
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
      * @return Issue the loaded model
@@ -194,6 +211,7 @@ class IssueController extends Controller{
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
+
     /*public function loadModel_bak($id) {
         $model = Issue::model()->findByPk($id);
         if ($model === null)
@@ -289,21 +307,33 @@ class IssueController extends Controller{
     public function actionAjaxcomment() {
         $id = Yii::app()->request->getPost('id');
         if (empty($id)) throw new CHttpException(500, 'request invalid', 1);
-        $issue = $this->loadModel($id);
+        $issue = $this->loadModel($id, 'with comments and author');
         $comment = new Comment;
-        if (isset($_POST['Comment'])) {
 
+        $commentDataProvider = new CActiveDataProvider('Comment', array(
+            'criteria' => array(
+                'condition' => 't.issue_id=:issueId',
+                'params' => array(':issueId' => $issue->id),
+            ),
+            'sort' => array(
+                'defaultOrder' => 't.create_time DESC',
+            ),
+            'pagination' => array(
+                'pageSize' => 3,
+            ),
+        ));
+
+        if (isset($_POST['Comment'])) {
             $comment->attributes = $_POST['Comment'];
             if ($issue->addComment($comment)) {
                 Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added via Ajax.");
             } else {
                 echo CActiveForm::validate($comment);
-//                Yii::app()->end();
             }
-
             $this->renderPartial('__comments', array(
                 'model' => $issue,
                 'comment' => $comment,
+                'commentDataProvider' => $commentDataProvider,
             ));
 
         }

@@ -85,7 +85,7 @@ class Issue extends TrackStarAR{
             'project' => array(self::BELONGS_TO, 'Project', 'project_id'),
             'creator' => array(self::BELONGS_TO, 'User', 'create_user_id'),
             'updator' => array(self::BELONGS_TO, 'User', 'update_user_id'),
-            'comments' => array(self::HAS_MANY, 'Comment', 'issue_id','order'=>'comments.create_time DESC'),
+            'comments' => array(self::HAS_MANY, 'Comment', 'issue_id'),
             'commentCount' => array(self::STAT, 'Comment', 'issue_id'),
         );
     }

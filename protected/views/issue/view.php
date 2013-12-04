@@ -60,16 +60,31 @@ $this->menu = array(
     ),
 )); ?>
 
+
 <div id="comments">
     <div id='ajaxcomments'>
-        <?php if ($model->commentCount >= 1): ?>
-            <h3>
-                <?php echo $model->commentCount > 1 ? $model->commentCount . ' comments' : '1 comment'; ?>
-            </h3>
 
-            <?php $this->renderPartial('_comments', array(
-                'comments' => $model->comments,
-            )); ?>
+        <?php if ($model->commentCount >= 1): ?>
+            <br>
+            <h3>
+                <?php echo ($model->commentCount > 1 ? $model->commentCount . ' comments' : '1 comment') . ' total'; ?>
+            </h3>
+            <?php
+            $this->widget('zii.widgets.CListView', array(
+                'dataProvider' => $commentDataProvider,
+                'itemView' => '/comment/_view',
+                'sortableAttributes' => array(
+                    'id',
+                    'create_time' => 'Created on',
+                ),
+            ));
+            ?>
+            <?php
+            /*            $this->renderPartial('_comments', array(
+                            'comments' => $model->comments(array('limit' => 5, 'order' => 'comments.create_time DESC')),
+                        ));
+                        */
+            ?>
         <?php endif; ?>
     </div>
     <h3>Leave a Comment</h3>

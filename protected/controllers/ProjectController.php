@@ -60,13 +60,16 @@ class ProjectController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        if (!Yii::app()->user->checkAccess('readProject', array('project' => $this->loadModel($id)))) {
+        $model = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('readProject', array('project' => $model))) {
             throw new CHttpException(403, 'You are not authorized to perform this action!');
         }
+        Yii::app()->clientScript->registerLinkTag('alternate', 'application/rss+xml', $this->createUrl('comment/feed', array('pid' => $model->id)));
+        Yii::app()->clientScript->registerLinkTag('alternate', 'application/rss+xml', $this->createUrl('comment/feed'));
         $issueDataProvider = new CActiveDataProvider('Issue', array(
             'criteria' => array(
                 'condition' => 't.project_id=:projectId',
-                'params' => array(':projectId' => $this->loadModel($id)->id),
+                'params' => array(':projectId' => $model->id),
                 'order' => 't.update_time DESC',
 //                'scopes' => array('owners'),
                 'scopes' => array('assignedUsers'),
@@ -77,7 +80,7 @@ class ProjectController extends Controller{
         ));
 
         $this->render('view', array(
-            'model' => $this->loadModel($id),
+            'model' => $model,
             'issueDataProvider' => $issueDataProvider,
         ));
 
@@ -155,6 +158,7 @@ class ProjectController extends Controller{
         if (!Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id)) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
+        Yii::app()->clientScript->registerLinkTag('alternate', 'application/rss+xml', $this->createUrl('comment/feed'));
         $dataProvider = new CActiveDataProvider('Project');
         $dataProvider->criteria = array(
             'scopes' => array('assignedUsers'),
