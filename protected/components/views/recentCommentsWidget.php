@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var RecentCommentsWidget $this
+ */
+?>
+
 <ul>
     <?php foreach ($this->getData() as $comment): ?>
         <div class="author">

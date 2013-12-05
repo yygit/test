@@ -20,6 +20,9 @@ class RecentCommentsWidget extends CWidget{
             $this->_comments = Comment::model()->recent($this->displayLimit)->findAll();
     }
 
+    /**
+     * @return Comment AR model
+     */
     public function getData() {
         return $this->_comments;
     }

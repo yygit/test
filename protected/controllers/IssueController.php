@@ -303,7 +303,10 @@ class IssueController extends Controller{
         return $comment;
     }
 
-
+    /**
+     * returns content for ajax button on issue/view page
+     * @throws CHttpException
+     */
     public function actionAjaxcomment() {
         $id = Yii::app()->request->getPost('id');
         if (empty($id)) throw new CHttpException(500, 'request invalid', 1);
@@ -338,5 +341,7 @@ class IssueController extends Controller{
 
         }
     }
+
+
 
 }

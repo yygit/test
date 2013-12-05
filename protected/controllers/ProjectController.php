@@ -70,9 +70,11 @@ class ProjectController extends Controller{
             'criteria' => array(
                 'condition' => 't.project_id=:projectId',
                 'params' => array(':projectId' => $model->id),
-                'order' => 't.update_time DESC',
-//                'scopes' => array('owners'),
                 'scopes' => array('assignedUsers'),
+            ),
+            'sort' => array(
+//                'defaultOrder' => 't.create_time DESC',
+                'defaultOrder' => 't.update_time DESC',
             ),
             'pagination' => array(
                 'pageSize' => 5,
