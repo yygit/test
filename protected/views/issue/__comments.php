@@ -14,10 +14,13 @@ if ($model->commentCount >= 1):
     <?php
     $this->widget('zii.widgets.CListView', array(
         'dataProvider' => $commentDataProvider,
-        'itemView' => '/comment/_view',
+        'itemView' => '/comment/_viewshort',
         'sortableAttributes' => array(
             'id',
             'create_time' => 'Created on',
+        ),
+        'pager' => array(
+//            'class'=>'CListPager',
         ),
     ));
     ?>

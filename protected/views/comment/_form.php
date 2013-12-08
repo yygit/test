@@ -15,24 +15,19 @@
             'validateOnChange' => true,
         ),
     )); ?>
-    <p class="note">Fields with <span class="required">*</span> are required.</p>
+    <!--<p class="note">Fields with <span class="required">*</span> are required.</p>-->
     <?php echo $form->errorSummary($model); ?>
     <div class="row">
-        <?php echo $form->labelEx($model, 'content'); ?>
+        <?php /*echo $form->labelEx($model, 'content'); */?>
         <?php echo $form->textArea($model, 'content', array('rows' => 6, 'cols' => 50)); ?>
         <?php echo $form->error($model, 'content'); ?>
     </div>
-
-    <?php
-    if (!empty($issueId))
-        echo CHtml::hiddenField('id', $issueId); // need this for ajax button
-    ?>
 
     <div class="row buttons">
         <?php
         echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');
         echo CHtml::ajaxButton('Ajax',
-            Yii::app()->createUrl('issue/ajaxcomment'),
+            Yii::app()->createUrl('issue/view', array('id'=>$issueId)),
             array(
                 'dataType' => 'html',
                 'type' => 'post',

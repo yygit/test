@@ -6,10 +6,12 @@ $this->breadcrumbs=array(
 	'Users',
 );
 
-$this->menu=array(
-	array('label'=>'Create User', 'url'=>array('create')),
-	array('label'=>'Manage User', 'url'=>array('admin')),
+$menu = array(
+//    array('label' => 'List Project', 'url' => array('index')),
 );
+$menu[] = Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id) ? array('label' => 'Manage User', 'url' => array('admin')) : null;
+$menu[] = Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id) ? array('label' => 'Create User', 'url' => array('create')) : null;
+$this->menu = $menu;
 ?>
 
 <h1>Users</h1>

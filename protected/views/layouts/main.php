@@ -42,7 +42,7 @@
         <?php
         $items = array(
             array('label' => 'Home', 'url' => array('/'), 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController . '/' . $this->defaultAction ? 'active' : null)),
-            array('label' => 'About', 'url' => array('/site/page', 'view' => 'about')),
+            array('label' => Yii::t('general','pages_about.about'), 'url' => array('/site/page', 'view' => 'about')),
             array('label' => 'Contact', 'url' => array('/site/contact')),
         );
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id) ? array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)) : null;

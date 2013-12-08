@@ -8,12 +8,21 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'List Project', 'url' => array('index')),
-    array('label' => 'Create Project', 'url' => array('create')),
-    array('label' => 'Update Project', 'url' => array('update', 'id' => $model->id)),
-    array('label' => 'Delete Project', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
-//    array('label' => 'Manage Project', 'url' => array('admin')),
+//    array('label' => 'List Project', 'url' => array('index')),
 );
+
+if (Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id)) {
+    $this->menu[] = array('label' => 'List Project', 'url' => array('index'));
+}
+if (Yii::app()->authManager->checkAccessNoBizrule('createProject', Yii::app()->user->id)) {
+    $this->menu[] = array('label' => 'Create Project', 'url' => array('create'));
+}
+if (Yii::app()->user->checkAccess('updateProject', array('project' => $model))) {
+    $this->menu[] = array('label' => 'Update Project', 'url' => array('update', 'id' => $model->id));
+}
+if (Yii::app()->user->checkAccess('deleteProject', array('project' => $model))) {
+    $this->menu[] = array('label' => 'Delete Project', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?'));
+}
 if (Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id)) {
     $this->menu[] = array('label' => 'Manage Project', 'url' => array('admin'));
 }

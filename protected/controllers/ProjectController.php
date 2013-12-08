@@ -31,24 +31,24 @@ class ProjectController extends Controller{
      * @return array access control rules
      */
     public function accessRules() {
-        $id = Yii::app()->request->getQuery('id');
+        /*$id = Yii::app()->request->getQuery('id');
         $model = $id ? $this->loadModel($id) : null;
-        $allow = in_array(Yii::app()->user->id, array_values(Project::listRelatedAttr($model, 'users', 'id'))) ? 'true' : 'false';
+        $allow = in_array(Yii::app()->user->id, array_values(Project::listRelatedAttr($model, 'users', 'id'))) ? 'true' : 'false';*/
 
         return array(
             array('allow', // allow
-                'actions' => array('index', 'admin', 'delete', 'adduser', 'deleteuser'),
+                'actions' => array('index', 'admin', 'delete', 'create', 'adduser', 'deleteuser'),
                 'users' => array('@'),
             ),
             array('allow', // allow
                 'actions' => array('update', 'view'),
                 'users' => array('@'),
-//                'expression' => "$allow OR Yii::app()->user->name==Yii::app()->params['God']",
+                /*'expression' => "$allow OR Yii::app()->user->name==Yii::app()->params['God']",*/
             ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
+            /*array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions' => array('create'), // only 'God' users may currently create projects
                 'users' => array(Yii::app()->params['God']),
-            ),
+            ),*/
             array('deny', // deny all users
                 'users' => array('*'),
             ),
@@ -93,6 +93,9 @@ class ProjectController extends Controller{
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('createProject', Yii::app()->user->id)) {
+            exit('You are not authorized to perform this action.');
+        }
         $model = new Project;
 
         // Uncomment the following line if AJAX validation is needed
@@ -116,7 +119,6 @@ class ProjectController extends Controller{
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-
         if (!Yii::app()->user->checkAccess('updateProject', array('project' => $model))) {
             /*// causes infinite loops if 'HttpsFilter' is on, may help redirecting to another action throwing error in http
             throw new CHttpException(403, 'You are not authorized to perform this action.');*/
@@ -143,10 +145,11 @@ class ProjectController extends Controller{
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (!Yii::app()->user->checkAccess('deleteProject', array('project' => $this->loadModel($id)))) {
+        $model = $this->loadModel($id);
+        if (!Yii::app()->user->checkAccess('deleteProject', array('project' => $model))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
-        $this->loadModel($id)->delete();
+        $model->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
@@ -241,6 +244,8 @@ class ProjectController extends Controller{
     /**
      * Provides a form so that project administrators can
      * associate other users to the project
+     * @todo Allow actionAdduser to users who can do actionCreate ?? Otherwise a user may only create a project
+     * and then 'God' user will have to assess the project and possibly make 'owner' an 'assigned user'
      */
     public function actionAdduser($id) {
         $project = $this->loadModel($id);

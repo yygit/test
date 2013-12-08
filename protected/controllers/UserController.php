@@ -74,7 +74,7 @@ class UserController extends Controller{
      */
     public function actionCreate() {
         if (!Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id)) {
-            throw new CHttpException(403, 'You are not authorized to perform this action.');
+            exit('You are not authorized to perform this action.');
         }
         $model = new User;
 
@@ -99,9 +99,6 @@ class UserController extends Controller{
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id)) {
-            throw new CHttpException(403, 'You are not authorized to perform this action.');
-        }
         $model = $this->loadModel($id);
         $model->oldPassword = $model->password;
         $model->password = '';
@@ -126,9 +123,6 @@ class UserController extends Controller{
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id)) {
-            throw new CHttpException(403, 'You are not authorized to perform this action.');
-        }
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

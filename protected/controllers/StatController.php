@@ -58,7 +58,6 @@ class StatController extends Controller{
     /**
      * Testing the auto-refresh block
      * http://www.yiiframework.com/forum/index.php/topic/40819-div-tag-with-ajax-refresh/
-     * @todo return total numbers of users, projects, issues, comments
      */
     public function actionIndex() {
         if (!Yii::app()->authManager->checkAccessNoBizrule('member', Yii::app()->user->id)) {

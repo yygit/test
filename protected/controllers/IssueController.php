@@ -68,7 +68,6 @@ class IssueController extends Controller{
         if (!Yii::app()->user->checkAccess('readIssue', array('project' => $issue->project))) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
-        $comment = $this->createComment($issue);
 
         $commentDataProvider = new CActiveDataProvider('Comment', array(
             'criteria' => array(
@@ -79,9 +78,16 @@ class IssueController extends Controller{
                 'defaultOrder' => 't.create_time DESC',
             ),
             'pagination' => array(
-                'pageSize' => 3,
+                'pageSize' => 10,
             ),
         ));
+
+        if (!Yii::app()->request->isAjaxRequest)
+            $comment = $this->createComment($issue);
+        elseif (isset($_POST['Comment']))  // if posted with ajax
+            $comment = $this->createCommentAjax($issue, $commentDataProvider);
+        else
+            $comment = new Comment;
 
         $this->render('view', array(
             'model' => $issue,
@@ -123,7 +129,9 @@ class IssueController extends Controller{
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
         if (!Yii::app()->user->checkAccess('updateIssue', array('project' => $model->project))) {
-            throw new CHttpException(403, 'You are not authorized to perform this action.');
+            /*// causes infinite loops if 'HttpsFilter' is on, may help redirecting to another action throwing error in http
+            throw new CHttpException(403, 'You are not authorized to perform this action.');*/
+            exit('You are not authorized to perform this action.');
         }
 
         // Uncomment the following line if AJAX validation is needed
@@ -304,44 +312,24 @@ class IssueController extends Controller{
     }
 
     /**
-     * returns content for ajax button on issue/view page
-     * @throws CHttpException
+     * Creates a new comment on an issue thru ajax
+     * @param Issue $issue
+     * @param CActiveDataProvider $commentDataProvider
      */
-    public function actionAjaxcomment() {
-        $id = Yii::app()->request->getPost('id');
-        if (empty($id)) throw new CHttpException(500, 'request invalid', 1);
-        $issue = $this->loadModel($id, 'with comments and author');
+    protected function createCommentAjax(Issue $issue, CActiveDataProvider $commentDataProvider) {
         $comment = new Comment;
-
-        $commentDataProvider = new CActiveDataProvider('Comment', array(
-            'criteria' => array(
-                'condition' => 't.issue_id=:issueId',
-                'params' => array(':issueId' => $issue->id),
-            ),
-            'sort' => array(
-                'defaultOrder' => 't.create_time DESC',
-            ),
-            'pagination' => array(
-                'pageSize' => 3,
-            ),
-        ));
-
-        if (isset($_POST['Comment'])) {
-            $comment->attributes = $_POST['Comment'];
-            if ($issue->addComment($comment)) {
-                Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added via Ajax.");
-            } else {
-                echo CActiveForm::validate($comment);
-            }
-            $this->renderPartial('__comments', array(
-                'model' => $issue,
-                'comment' => $comment,
-                'commentDataProvider' => $commentDataProvider,
-            ));
-
+        $comment->attributes = $_POST['Comment'];
+        if ($issue->addComment($comment)) {
+            Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added via Ajax.");
+        } else {
+            echo CActiveForm::validate($comment);
         }
+        $this->renderPartial('__comments', array(
+            'model' => $issue,
+            'comment' => $comment,
+            'commentDataProvider' => $commentDataProvider,
+        ));
+        Yii::app()->end();
     }
-
-
 
 }

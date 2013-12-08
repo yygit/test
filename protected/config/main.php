@@ -9,6 +9,7 @@ return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'LOCALHOST / TEST',
 //    'theme' => 'hebo',
+//    'theme' => 'newtheme',
     'sourceLanguage' => '00',
     'language' => 'en',
 

@@ -72,7 +72,7 @@ $this->menu = array(
             <?php
             $this->widget('zii.widgets.CListView', array(
                 'dataProvider' => $commentDataProvider,
-                'itemView' => '/comment/_view',
+                'itemView' => '/comment/_viewshort',
                 'sortableAttributes' => array(
                     'id',
                     'create_time' => 'Created on',
@@ -87,7 +87,9 @@ $this->menu = array(
             ?>
         <?php endif; ?>
     </div>
-    <h3>Leave a Comment</h3>
+    <br />
+
+    <h3 style="margin-bottom: 0px;">Leave a Comment</h3>
 
     <?php if (Yii::app()->user->hasFlash('commentSubmitted')): ?>
         <div class="flash-success">
