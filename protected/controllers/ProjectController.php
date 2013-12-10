@@ -73,7 +73,6 @@ class ProjectController extends Controller{
                 'scopes' => array('assignedUsers'),
             ),
             'sort' => array(
-//                'defaultOrder' => 't.create_time DESC',
                 'defaultOrder' => 't.update_time DESC',
             ),
             'pagination' => array(
