@@ -60,14 +60,14 @@ class StatController extends Controller{
      * http://www.yiiframework.com/forum/index.php/topic/40819-div-tag-with-ajax-refresh/
      */
     public function actionIndex() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('member', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('member')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         echo 'current date is ' . date('r');
     }
 
     public function actionTimestamp() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('reader')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         echo time();

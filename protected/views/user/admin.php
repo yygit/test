@@ -9,8 +9,8 @@ $this->breadcrumbs = array(
 
 $menu = array( //    array('label' => 'List Project', 'url' => array('index')),
 );
-$menu[] = Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id) ? array('label' => 'List User', 'url' => array('index')) : null;
-$menu[] = Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id) ? array('label' => 'Create User', 'url' => array('create')) : null;
+$menu[] = Yii::app()->authManager->checkAccessNoBizrule('reader') ? array('label' => 'List User', 'url' => array('index')) : null;
+$menu[] = Yii::app()->authManager->checkAccessNoBizrule('owner') ? array('label' => 'Create User', 'url' => array('create')) : null;
 $this->menu = $menu;
 
 Yii::app()->clientScript->registerScript('search', "

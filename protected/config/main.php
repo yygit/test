@@ -23,6 +23,7 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
+        'application.modules.admin.models.*',
 //         'shared.*',
     ),
 
@@ -34,7 +35,14 @@ return array(
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters' => array('127.0.0.1', '::1'),
         ),
-
+        'admin' => array(
+            'params' => array(
+                'theme'=>'grey',
+                'testvar1'=>11111,
+                'testvar2'=>1234,
+                'testvar3'=>'12 some string 34',
+            ),
+        ),
     ),
 
     // application components

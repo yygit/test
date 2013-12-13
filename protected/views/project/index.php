@@ -1,6 +1,7 @@
 <?php
 /* @var $this ProjectController */
 /* @var $dataProvider CActiveDataProvider */
+/* @var $sysMessage string message attribute of SysMessage AR model */
 
 $this->breadcrumbs = array(
     'Projects',
@@ -9,10 +10,21 @@ $this->breadcrumbs = array(
 $menu = array(
 //    array('label' => 'Manage Project', 'url' => array('admin')),
 );
-$menu[] = Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id) ? array('label' => 'Manage Project', 'url' => array('admin')) : null;
-$menu[] = Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id) ? array('label' => 'Create Project', 'url' => array('create')) : null;
+$menu[] = Yii::app()->authManager->checkAccessNoBizrule('reader') ? array('label' => 'Manage Project', 'url' => array('admin')) : null;
+$menu[] = Yii::app()->authManager->checkAccessNoBizrule('owner') ? array('label' => 'Create Project', 'url' => array('create')) : null;
 $this->menu = $menu;
 ?>
+
+<?php if($sysMessage != null):?>
+    <div class="sys-message">
+        <?php echo $sysMessage; ?>
+    </div>
+    <?php
+    Yii::app()->clientScript->registerScript(
+        'fadeAndHideEffect',
+        '$(".sys-message").animate({opacity: 1.0}, 5000).fadeOut("slow");'
+    );
+endif; ?>
 
 <h1>Projects</h1>
 

@@ -64,10 +64,7 @@ class SiteController extends Controller{
         $model = new ContactForm;
 
         // if it is ajax validation request
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'contact-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
+        $this->performAjaxValidation($model, 'contact-form');
 
         if (isset($_POST['ContactForm'])) {
             $model->attributes = $_POST['ContactForm'];
@@ -85,13 +82,13 @@ class SiteController extends Controller{
      * Displays the login page
      */
     public function actionLogin() {
+        if (!Yii::app()->user->isGuest)
+            $this->redirect(Yii::app()->user->returnUrl);
+
         $model = new LoginForm;
 
         // if it is ajax validation request
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
+        $this->performAjaxValidation($model, 'login-form');
 
         // collect user input data
         if (isset($_POST['LoginForm'])) {
@@ -112,11 +109,22 @@ class SiteController extends Controller{
         $this->redirect(Yii::app()->homeUrl);
     }
 
-    public function actionJs() {
-        $this->render('js');
+
+    /**
+     * Performs the AJAX validation.
+     * @param CModel $model the model to be validated
+     */
+    protected function performAjaxValidation($model, $id = 'contact-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === $id) {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
     }
 
 
+    public function actionJs() {
+        $this->render('js');
+    }
 
 
 }

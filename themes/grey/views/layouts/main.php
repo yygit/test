@@ -47,12 +47,13 @@
             array('label' => Yii::t('general','pages_about.about'), 'url' => array('/site/page', 'view' => 'about')),
             array('label' => 'Contact', 'url' => array('/site/contact')),
         );
-        $items[] = Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id) ? array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)) : null;
-        $items[] = Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id) ? array('label' => 'Projects', 'url' => array('/project'), 'itemOptions' => array('class' => $this->id == 'project' ? 'active' : null)) : null;
-        $items[] = Yii::app()->authManager->checkAccessNoBizrule('readIssue', Yii::app()->user->id) ? array('label' => 'Issues', 'url' => array('/issue'), 'itemOptions' => array('class' => $this->id == 'issue' ? 'active' : null)) : null;
-        $items[] = Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id) ? array('label' => 'Comments', 'url' => array('/comment'), 'itemOptions' => array('class' => $this->id == 'comment' ? 'active' : null)) : null;
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('reader') ? array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)) : null;
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('readProject') ? array('label' => 'Projects', 'url' => array('/project'), 'itemOptions' => array('class' => $this->id == 'project' ? 'active' : null)) : null;
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('readIssue') ? array('label' => 'Issues', 'url' => array('/issue'), 'itemOptions' => array('class' => $this->id == 'issue' ? 'active' : null)) : null;
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('owner') ? array('label' => 'Comments', 'url' => array('/comment'), 'itemOptions' => array('class' => $this->id == 'comment' ? 'active' : null)) : null;
         $items[] = array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest);
         $items[] = array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest);
+        $items[] = Yii::app()->authManager->checkAccessNoBizrule('adminManagement') ? array('label' => 'UserAdmin', 'url' => array('/admin')) : null;
 
         $this->widget('zii.widgets.CMenu', array(
             'items' => array_values($items),

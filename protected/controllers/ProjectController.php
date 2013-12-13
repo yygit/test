@@ -92,7 +92,7 @@ class ProjectController extends Controller{
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('createProject', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('createProject')) {
             exit('You are not authorized to perform this action.');
         }
         $model = new Project;
@@ -159,7 +159,7 @@ class ProjectController extends Controller{
      * Lists all models.
      */
     public function actionIndex() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readProject')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         Yii::app()->clientScript->registerLinkTag('alternate', 'application/rss+xml', $this->createUrl('comment/feed'));
@@ -167,8 +167,17 @@ class ProjectController extends Controller{
         $dataProvider->criteria = array(
             'scopes' => array('assignedUsers'),
         );
+
+        //get the latest system message to display based on the update_time column
+        $sysMessage = SysMessage::model()->find(array('order'=>'t.update_time DESC',));
+        if(!empty($sysMessage))
+            $message = $sysMessage->message;
+        else
+            $message = null;
+
         $this->render('index', array(
             'dataProvider' => $dataProvider,
+            'sysMessage'=>$message,
         ));
     }
 
@@ -176,7 +185,7 @@ class ProjectController extends Controller{
      * Manages all models.
      */
     public function actionAdmin() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('readProject', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readProject')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $model = new Project('search');

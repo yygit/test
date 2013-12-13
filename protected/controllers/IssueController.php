@@ -169,7 +169,7 @@ class IssueController extends Controller{
      * Lists all models.
      */
     public function actionIndex() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('readIssue', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readIssue')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $dataProvider = new CActiveDataProvider('Issue');
@@ -186,7 +186,7 @@ class IssueController extends Controller{
      * Manages all models.
      */
     public function actionAdmin() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('readIssue', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('readIssue')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $model = new Issue('search');

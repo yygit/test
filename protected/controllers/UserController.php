@@ -60,7 +60,7 @@ class UserController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('member', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('member')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $this->render('view', array(
@@ -73,7 +73,7 @@ class UserController extends Controller{
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('owner', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('owner')) {
             exit('You are not authorized to perform this action.');
         }
         $model = new User;
@@ -134,7 +134,7 @@ class UserController extends Controller{
      * Lists all models.
      */
     public function actionIndex() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('reader')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $dataProvider = new CActiveDataProvider('User');
@@ -148,7 +148,7 @@ class UserController extends Controller{
      * Manages all models.
      */
     public function actionAdmin() {
-        if (!Yii::app()->authManager->checkAccessNoBizrule('reader', Yii::app()->user->id)) {
+        if (!Yii::app()->authManager->checkAccessNoBizrule('reader')) {
             throw new CHttpException(403, 'You are not authorized to perform this action.');
         }
         $model = new User('search');
