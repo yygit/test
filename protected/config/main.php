@@ -37,10 +37,10 @@ return array(
         ),
         'admin' => array(
             'params' => array(
-                'theme'=>'grey',
-                'testvar1'=>11111,
-                'testvar2'=>1234,
-                'testvar3'=>'12 some string 34',
+                'theme' => 'grey',
+                'testvar1' => 11111,
+                'testvar2' => 1234,
+                'testvar3' => '12 some string 34',
             ),
         ),
     ),
@@ -73,15 +73,32 @@ return array(
             'routes' => array_filter(array(
                 array(
                     'class' => 'CFileLogRoute',
-                    'levels' => 'error, warning',
+                    'levels' => 'error',
+                    'logFile' => 'error.log',
                 ),
+                array(
+                    'class' => 'CFileLogRoute',
+                    'levels' => 'warning',
+                    'logFile' => 'warning.log',
+                ),
+                /*array(
+                    'class' => 'MyCEmailLogRoute',
+                    'levels' => 'warning, error',
+                    'utf8' => true,
+                    'mailer' => 'smtp',
+                    'emails' => array('4841601@gmail.com'),
+                    'sentFrom' => 'MyCEmailLogRoute@example.com',
+                    'subject' => 'MyCEmailLogRoute at '.$_SERVER['HTTP_HOST'],
+                    'enabled' => !YII_DEBUG,
+                ),*/
                 YII_DEBUG ? array(
                     'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
                     'ipFilters' => array('localhost', '127.0.0.1', '::1'),
                 ) : null,
                 // uncomment the following to show log messages on web pages
                 /*array(
-                    'class'=>'CWebLogRoute',
+                    'class' => 'CWebLogRoute',
+                    'levels' => 'warning, error',
                 ),*/
                 /*array(
                     'class'=>'CProfileLogRoute',
@@ -117,13 +134,23 @@ return array(
         /*'cache' => array(
 			'class' => 'CApcCache',
 		),*/
+        'Smtpmail' => array(
+            'class' => 'ext.smtpmail.PHPMailer',
+            'Host' => "smtp.gmail.com",
+            'Username' => 'nebazori@gmail.com',
+            'Password' => 'z87654312',
+            'Mailer' => 'smtp',
+            'Port' => 587,
+            'SMTPAuth' => true,
+            'SMTPSecure' => 'tls',
+        ),
     ),
 
     // application-level parameters that can be accessed
     // using Yii::app()->params['paramName']
     'params' => array(
         // this is used in contact page
-        'adminEmail' => 'webmaster@example.com',
+        'adminEmail' => 'nebazori@gmail.com',
         'encryptionKey' => '1a2S3d4f5G',
         'God' => 'admin',
     ),

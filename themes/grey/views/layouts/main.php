@@ -42,8 +42,8 @@
     <div id="mainmenu">
         <?php
         $items = array(
-//            array('label' => 'Home', 'url' => array('/'), 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController . '/' . $this->defaultAction ? 'active' : null)),
             array('label' => 'Home', 'url' => Yii::app()->homeUrl, 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController . '/' . $this->defaultAction ? 'active' : null)),
+            array('label' => 'UserAdmin', 'url' => array('/admin'), 'visible' =>Yii::app()->authManager->checkAccessNoBizrule('adminManagement')),
             array('label' => Yii::t('general','pages_about.about'), 'url' => array('/site/page', 'view' => 'about')),
             array('label' => 'Contact', 'url' => array('/site/contact')),
         );
@@ -53,7 +53,6 @@
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('owner') ? array('label' => 'Comments', 'url' => array('/comment'), 'itemOptions' => array('class' => $this->id == 'comment' ? 'active' : null)) : null;
         $items[] = array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest);
         $items[] = array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest);
-        $items[] = Yii::app()->authManager->checkAccessNoBizrule('adminManagement') ? array('label' => 'UserAdmin', 'url' => array('/admin')) : null;
 
         $this->widget('zii.widgets.CMenu', array(
             'items' => array_values($items),

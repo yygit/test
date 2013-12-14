@@ -27,7 +27,7 @@ class AdminModule extends CWebModule{
     private function _setController(CController $controller) {
         $controller->moduleparams = $this->getParams();
         $controller->moduleparams->maincssBaseUrl = Yii::app()->request->baseUrl;
-        if (!empty($controller->moduleparams->theme)AND !empty(Yii::app()->theme) AND $controller->moduleparams->theme === Yii::app()->theme->name)
+        if (!empty($controller->moduleparams->theme) AND !empty(Yii::app()->theme) AND $controller->moduleparams->theme === Yii::app()->theme->name)
             $controller->moduleparams->maincssBaseUrl = Yii::app()->theme->baseUrl;
     }
 }
