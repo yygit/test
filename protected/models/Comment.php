@@ -98,6 +98,9 @@ class Comment extends TrackStarAR{
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => array(
+                'defaultOrder' => 'id DESC',
+            ),
         ));
     }
 

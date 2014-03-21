@@ -7,15 +7,14 @@ $this->breadcrumbs = array(
     'Projects',
 );
 
-$menu = array(
-//    array('label' => 'Manage Project', 'url' => array('admin')),
+$menu = array( //    array('label' => 'Manage Project', 'url' => array('admin')),
 );
 $menu[] = Yii::app()->authManager->checkAccessNoBizrule('reader') ? array('label' => 'Manage Project', 'url' => array('admin')) : null;
 $menu[] = Yii::app()->authManager->checkAccessNoBizrule('owner') ? array('label' => 'Create Project', 'url' => array('create')) : null;
 $this->menu = $menu;
 ?>
 
-<?php if($sysMessage != null):?>
+<?php if ($sysMessage != null): ?>
     <div class="sys-message">
         <?php echo $sysMessage; ?>
     </div>
@@ -33,12 +32,25 @@ endif; ?>
     'itemView' => '_view',
 )); ?>
 
-<?php // comments
-$this->beginWidget('zii.widgets.CPortlet', array(
-    'title' => 'Recent Comments',
-));
-$this->widget('RecentCommentsWidget', array(
-    'displayLimit' => 5,
-));
-$this->endWidget();
+<?php
+// comments
+// FRAGMENT CACHING; YY 20131216
+$key = "TrackStar.ProjectListing.RecentComments";
+//if ($this->beginCache($key, array('duration' => 120))) {
+if ($this->beginCache($key, array(
+    'dependency' => array(
+        'class' => 'system.caching.dependencies.CDbCacheDependency',
+        'sql' => 'SELECT MAX(update_time) FROM tbl_comment',
+    ),
+    'duration' => 120,
+))) {
+    $this->beginWidget('zii.widgets.CPortlet', array(
+        'title' => 'Recent Comments',
+    ));
+    $this->widget('RecentCommentsWidget', array(
+        'displayLimit' => 5,
+    ));
+    $this->endWidget();
+    $this->endCache();
+}
 ?>

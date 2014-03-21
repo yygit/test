@@ -1,4 +1,9 @@
-<?php $this->pageTitle = Yii::app()->name; ?>
+<?php
+/**
+ * @var SiteController $this
+ */
+
+$this->pageTitle = Yii::app()->name; ?>
 
 <h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
 <?php if (!Yii::app()->user->isGuest): ?>
@@ -8,12 +13,13 @@
 <?php endif; ?>
 
 <ul>
+    <li>YII_DEBUG: <tt><?php echo YII_DEBUG; ?></tt></li>
     <li>View file: <tt><?php echo __FILE__; ?></tt></li>
     <li>Layout: <tt><?php echo $this->layout; ?></tt></li>
     <li>Layout file: <tt><?php echo $this->getLayoutFile($this->layout); ?></tt></li>
-    <li>YiiBase::$_aliases <?php var_dump(YiiBase::$_aliases); ?></li>
+    <li>YiiBase::$_aliases <?php if (!empty(YiiBase::$_aliases)) var_dump(YiiBase::$_aliases); ?></li>
 </ul>
 
 <?php
-//var_dump(Yii::app()->authManager->checkAccessNoBizrule('createProject','1'));
+var_dump(get_class(Yii::app()->session));
 ?>

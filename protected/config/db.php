@@ -7,7 +7,8 @@ return array(
     'password' => 'yura',
     'charset' => 'utf8',
 
-//	'schemaCachingDuration' => 180,
+	'schemaCachingDuration' => 180,
+	'queryCacheID' => 'cache',
     'enableProfiling' => true,
     'enableParamLogging' => true,
 );

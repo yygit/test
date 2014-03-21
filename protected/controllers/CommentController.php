@@ -18,6 +18,14 @@ class CommentController extends Controller{
         return CMap::mergeArray(array(
                 'accessControl', // perform access control for CRUD operations
                 'postOnly + delete', // we only allow deletion via POST request
+                YII_DEBUG ? null : array(
+                    'CHttpCacheFilter + index',
+                    'lastModifiedExpression' => function () {
+                        /*$id=Yii::app()->request->getParam('id');
+                        return Yii::app()->db->createCommand("SELECT `update_time` FROM ".Project::tableName()." WHERE id=:id")->queryScalar(array(':id'=>$id));*/
+                        return Yii::app()->db->createCommand("SELECT MAX(`update_time`) FROM " . Comment::tableName())->queryScalar();
+                    },
+                ),
             ),
             parent::filters());
     }

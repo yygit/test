@@ -91,10 +91,11 @@ return array(
                     'subject' => 'MyCEmailLogRoute at '.$_SERVER['HTTP_HOST'],
                     'enabled' => !YII_DEBUG,
                 ),*/
-                YII_DEBUG ? array(
+                array(
                     'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
                     'ipFilters' => array('localhost', '127.0.0.1', '::1'),
-                ) : null,
+                    'enabled' => YII_DEBUG,
+                ),
                 // uncomment the following to show log messages on web pages
                 /*array(
                     'class' => 'CWebLogRoute',
@@ -122,18 +123,19 @@ return array(
             'class' => 'ext.bootstrap.components.Bootstrap',
             'responsiveCss' => true,
         ),*/
-        /*'session' => array(
-            'class' => 'CDbHttpSession',
-            'connectionID' => 'db',
-            'sessionTableName' => 'session',
+        'session' => array_filter(array(
+//            'class' => 'CDbHttpSession',
+//            'connectionID' => 'db',
+//            'sessionTableName' => 'session',
 
-//			'class' =>'CCacheHttpSession',
-//			'cacheID' => 'cache',
-        ),*/
+            'class' => YII_DEBUG ? 'CHttpSession' : 'CCacheHttpSession',
+			'cacheID' => YII_DEBUG ? null : 'cache',
+        )),
 
-        /*'cache' => array(
-			'class' => 'CApcCache',
-		),*/
+        'cache' => array(
+//            'class' => YII_DEBUG ? 'CDummyCache' : 'CApcCache',
+            'class' => YII_DEBUG ? 'CDummyCache' : 'CFileCache',
+        ),
         'Smtpmail' => array(
             'class' => 'ext.smtpmail.PHPMailer',
             'Host' => "smtp.gmail.com",

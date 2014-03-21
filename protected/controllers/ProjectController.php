@@ -6,7 +6,7 @@ class ProjectController extends Controller{
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
-    public $defaultAction = 'admin';
+    public $defaultAction = 'index';
 
     /**
      * @var User property containing the associated User model instance.
@@ -21,6 +21,13 @@ class ProjectController extends Controller{
                 'accessControl', // perform access control for CRUD operations
                 'postOnly + delete', // we only allow deletion via POST request
                 'userContext + create,update', //check to ensure valid user context
+                array( //example of entire PAGE CACHING - turned off as this does not allow us to use the pagination for issues
+                    'COutputCache + view', // cache the entire output from the actionView() method for 2 minutes
+                    'duration' => 120,
+                    'varyByParam' => array('id', 'Issue_page', 'Issue_sort'), // YY; 20131217 this helps correct caching when sorting
+                    'varyByExpression' => 'Issue::model()->assignedUsers()->countByAttributes(array("project_id"=>$_GET["id"]))', // YY; 20131217 this helps pagination
+                    'varyBySession' => true,
+                ),
             ),
             parent::filters());
     }
@@ -58,6 +65,7 @@ class ProjectController extends Controller{
     /**
      * Displays a particular project model.
      * @param integer $id the ID of the model to be displayed
+     * @throws CHttpException
      */
     public function actionView($id) {
         $model = $this->loadModel($id);
@@ -142,6 +150,7 @@ class ProjectController extends Controller{
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
+     * @throws CHttpException
      */
     public function actionDelete($id) {
         $model = $this->loadModel($id);
@@ -169,15 +178,16 @@ class ProjectController extends Controller{
         );
 
         //get the latest system message to display based on the update_time column
-        $sysMessage = SysMessage::model()->find(array('order'=>'t.update_time DESC',));
-        if(!empty($sysMessage))
+        // $sysMessage = SysMessage::model()->find(array('order'=>'t.update_time DESC',));
+        $sysMessage = SysMessage::getLatest(); // use QUERY CACHING
+        if (!empty($sysMessage))
             $message = $sysMessage->message;
         else
             $message = null;
 
         $this->render('index', array(
             'dataProvider' => $dataProvider,
-            'sysMessage'=>$message,
+            'sysMessage' => $message,
         ));
     }
 
@@ -216,6 +226,7 @@ class ProjectController extends Controller{
     /**
      * Performs the AJAX validation.
      * @param Project $model the model to be validated
+     * * @param string $id
      */
     protected function performAjaxValidation($model, $id = 'project-form') {
         if (isset($_POST['ajax']) && $_POST['ajax'] === $id) {
@@ -226,7 +237,8 @@ class ProjectController extends Controller{
 
     /**
      * Protected method to load the associated User model class to assign Project's Owning User
-     * @return object the User data model based on the primary key
+     * @return mixed|null|User the User data model based on the primary key
+     * @throws CHttpException
      */
     protected function loadUser() {
         //if the user property is null, create it based on input id

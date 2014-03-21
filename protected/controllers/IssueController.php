@@ -62,6 +62,7 @@ class IssueController extends Controller{
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
+     * @throws CHttpException
      */
     public function actionView($id) {
         $issue = $this->loadModel($id, 'with comments and author');

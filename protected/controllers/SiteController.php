@@ -43,6 +43,8 @@ class SiteController extends Controller{
         // renders the view file 'protected/views/site/index.php'
         // using the default layout 'protected/views/layouts/main.php'
         $this->render('index');
+//        throw new CException ('testing exception at ' . __FILE__ . ': ' . __LINE__);
+//        throw new CHttpException (404, 'testing exception at ' . __FILE__ . ': ' . __LINE__, 1);
     }
 
     /**
@@ -113,6 +115,7 @@ class SiteController extends Controller{
     /**
      * Performs the AJAX validation.
      * @param CModel $model the model to be validated
+     * @param string $id
      */
     protected function performAjaxValidation($model, $id = 'contact-form') {
         if (isset($_POST['ajax']) && $_POST['ajax'] === $id) {
