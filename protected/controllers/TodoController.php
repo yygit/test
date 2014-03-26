@@ -1,0 +1,102 @@
+<?php
+class TodoController extends CController{
+    public function actionIndex() {
+        $task = new Todo();
+        $this->render('index', array(
+            'task' => $task,
+        ));
+    }
+
+    public function actionTask() {
+        $req = Yii::app()->request;
+        if ($req->isPostRequest) {
+            $this->handlePost($req->getPost('id'), $req->getPost('Todo'));
+        } elseif ($req->isPutRequest) {
+            $this->handlePut($req->getPut('Todo'));
+        } elseif ($req->isDeleteRequest) {
+            $this->handleDelete($req->getDelete('id'));
+        } else {
+            $this->handleGet($req->getParam('id'));
+        }
+    }
+
+    private function handleGet($id) {
+        if ($id) {
+            $task = $this->loadModel($id);
+            $this->sendResponse($task->attributes);
+        } else {
+            $data = array();
+            $tasks = Todo::model()->findAll(array('order' => 'id'));
+            foreach ($tasks as $task) {
+                $data[] = $task->attributes;
+            }
+            $this->sendResponse($data);
+        }
+    }
+
+    private function handlePut($data) {
+        $task = new Todo();
+        $this->saveTask($task, $data);
+    }
+
+    private function handlePost($id, $data) {
+        $task = $this->loadModel($id);
+        $this->saveTask($task, $data);
+    }
+
+    private function saveTask($task, $data) {
+        if (!is_array($data)) {
+            $this->sendResponse(array(), 400, array('No data provided.'));
+        }
+
+        $task->attributes = $data;
+        if ($task->save()) {
+            $this->sendResponse($task->attributes);
+        } else {
+            $errors = array();
+            foreach ($task->errors as $fieldErrors) {
+                foreach ($fieldErrors as $error) {
+                    $errors[] = $error;
+                }
+            }
+            $this->sendResponse(array(), 400, $errors);
+        }
+    }
+
+    private function handleDelete($id) {
+        $task = $this->loadModel($id);
+        if ($task->delete()) {
+            $this->sendResponse('OK');
+        } else {
+            $this->sendResponse(array(), 500, array('Unable to delete task.'));
+        }
+    }
+
+    private function loadModel($id) {
+        $task = Todo::model()->findByPk($id);
+        if (!$task) {
+            $this->sendResponse(array(), 404, array('Task not found.'));
+        }
+
+        return $task;
+    }
+
+    private function sendResponse($data, $responseCode = 200, $errors = array()) {
+        $messages = array(
+            200 => 'OK',
+            400 => 'Bad Request',
+            404 => 'Not Found',
+            500 => 'Internal Server Error',
+        );
+
+        if (in_array($responseCode, array_keys($messages))) {
+            header("HTTP/1.0 $responseCode " . $messages[$responseCode], true, $responseCode);
+        }
+
+        echo json_encode(array(
+            'errors' => $errors,
+            'data' => $data,
+        ));
+        Yii::app()->end();
+    }
+}

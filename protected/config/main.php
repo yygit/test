@@ -129,7 +129,7 @@ return array(
 //            'sessionTableName' => 'session',
 
             'class' => YII_DEBUG ? 'CHttpSession' : 'CCacheHttpSession',
-			'cacheID' => YII_DEBUG ? null : 'cache',
+            'cacheID' => YII_DEBUG ? null : 'cache',
         )),
 
         'cache' => array(
@@ -145,6 +145,23 @@ return array(
             'Port' => 587,
             'SMTPAuth' => true,
             'SMTPSecure' => 'tls',
+        ),
+        'clientScript' => array(
+            'packages' => array(
+                'doT' => array(
+                    'basePath' => 'application.assets',
+                    'js' => array('doT.min.js'),
+                ),
+                'todo' => array(
+                    'basePath' => 'application.assets',
+                    'js' => array('todo.js'),
+                    'css' => array('todo.css'),
+                    'depends' => array(
+                        'jquery',
+                        'doT',
+                    ),
+                ),
+            ),
         ),
     ),
 
