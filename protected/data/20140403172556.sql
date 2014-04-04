@@ -2,10 +2,32 @@
 MySQL Backup
 Source Server Version: 5.5.25
 Source Database: sakila
-Date: 18.12.2013 16:47:55
+Date: 03.04.2014 17:25:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+--  Table structure for `car`
+-- ----------------------------
+DROP TABLE IF EXISTS `car`;
+CREATE TABLE `car` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+--  Table structure for `task`
+-- ----------------------------
+DROP TABLE IF EXISTS `task`;
+CREATE TABLE `task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `done` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 --  Table structure for `tbl_auth_assignment`
@@ -183,6 +205,8 @@ CREATE TABLE `tbl_user` (
 -- ----------------------------
 --  Records 
 -- ----------------------------
+INSERT INTO `car` VALUES ('1','Ford Focus','family'), ('2','Opel Astra','family'), ('3','Kia Ceed','family'), ('4','Porsche Boxster','sport'), ('5','Ferrari 550','sport'), ('6','Ford Focus','family'), ('7','Opel Astra','family'), ('8','Kia Ceed','family'), ('9','Porsche Boxster','sport'), ('10','Ferrari 550','sport'), ('11','Ferrari 554','sport1');
+INSERT INTO `task` VALUES ('4','title #1','0'), ('5','title #2','0');
 INSERT INTO `tbl_auth_assignment` VALUES ('adminManagement','5',NULL,NULL), ('member','1','return isset($params[\"project\"]) && $params[\"project\"]->allowCurrentUser(\"member\");','N;'), ('owner','4','return isset($params[\"project\"]) && $params[\"project\"]->allowCurrentUser(\"owner\");','N;');
 INSERT INTO `tbl_auth_item` VALUES ('admin','2','admin',NULL,'N;'), ('adminManagement','0','access to the application administration functionality',NULL,'N;'), ('createIssue','0','create a new issue',NULL,'N;'), ('createProject','0','create a new project',NULL,'N;'), ('createUser','0','create a new user',NULL,'N;'), ('deleteIssue','0','delete an issue from a project',NULL,'N;'), ('deleteProject','0','delete a project',NULL,'N;'), ('deleteUser','0','remove a user from a project',NULL,'N;'), ('member','2','',NULL,'N;'), ('owner','2','',NULL,'N;'), ('reader','2','',NULL,'N;'), ('readIssue','0','read issue information',NULL,'N;'), ('readProject','0','read project information',NULL,'N;'), ('readUser','0','read user profile information',NULL,'N;'), ('updateIssue','0','update issue information',NULL,'N;'), ('updateProject','0','update project information',NULL,'N;'), ('updateUser','0','update a users information',NULL,'N;');
 INSERT INTO `tbl_auth_item_child` VALUES ('admin','adminManagement'), ('member','createIssue'), ('owner','createProject'), ('owner','createUser'), ('member','deleteIssue'), ('owner','deleteProject'), ('owner','deleteUser'), ('owner','member'), ('admin','owner'), ('member','reader'), ('reader','readIssue'), ('reader','readProject'), ('reader','readUser'), ('member','updateIssue'), ('owner','updateProject'), ('owner','updateUser');
@@ -192,4 +216,4 @@ INSERT INTO `tbl_migration` VALUES ('m000000_000000_base','1384537482'), ('m1205
 INSERT INTO `tbl_project` VALUES ('4','Project 1','description for <b>project</b> #1 description for project #1 description for project #1 description for project #1 description for project #1 description for project #1 description for project #1 description for project #1 description for project #1 description for project #1 description for project #1 description for project #1 ',NULL,'1','2013-12-10 12:18:34','1'), ('5','Project 2','Peoject 2 Peoject 2 Peoject 2 Peoject 2 Peoject 2 Peoject 2 Peoject 2 Peoject 2 Peoject 2 ','2013-11-29 14:30:40','1','2013-12-10 12:18:11','1');
 INSERT INTO `tbl_project_user_assignment` VALUES ('4','1','member'), ('5','1','member'), ('4','4','owner');
 INSERT INTO `tbl_sys_message` VALUES ('1','Hello users! This is Admin speaking!','2013-12-12 18:25:24','1','2013-12-18 16:22:35','1');
-INSERT INTO `tbl_user` VALUES ('1','admin','admin@sample.com','21232f297a57a5a743894a0e4a801fc3','2013-12-18 16:27:41',NULL,'1','2013-11-21 17:26:14','1'), ('4','demo','demo@sample.com','fe01ce2a7fbac8fafaed7c982a04e229','2013-12-18 16:22:42','2013-11-27 15:00:09','1','2013-12-08 18:08:38','4'), ('5','user','user@example.com','ee11cbb19052e40b07aac0ca060c23ee','2013-12-18 11:23:25','2013-12-05 17:14:08','1','2013-12-05 17:14:08','1');
+INSERT INTO `tbl_user` VALUES ('1','admin','admin@sample.com','21232f297a57a5a743894a0e4a801fc3','2014-03-25 11:16:44',NULL,'1','2013-11-21 17:26:14','1'), ('4','demo','demo@sample.com','fe01ce2a7fbac8fafaed7c982a04e229','2013-12-24 11:30:09','2013-11-27 15:00:09','1','2013-12-08 18:08:38','4'), ('5','user','user@example.com','ee11cbb19052e40b07aac0ca060c23ee','2013-12-18 11:23:25','2013-12-05 17:14:08','1','2013-12-05 17:14:08','1');
