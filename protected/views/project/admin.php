@@ -7,8 +7,7 @@ $this->breadcrumbs = array(
     'Manage',
 );
 
-$menu = array(
-//    array('label' => 'List Project', 'url' => array('index')),
+$menu = array(//    array('label' => 'List Project', 'url' => array('index')),
 );
 $menu[] = Yii::app()->authManager->checkAccessNoBizrule('reader') ? array('label' => 'List Project', 'url' => array('index')) : null;
 $menu[] = Yii::app()->authManager->checkAccessNoBizrule('owner') ? array('label' => 'Create Project', 'url' => array('create')) : null;
@@ -57,6 +56,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         'create_time',
         'create_user_id',
         'update_time',
+        array( // see yii-application-cookbook-2nd-edition-code-master\07\creating_custom_grid_columns
+            'class' => 'FlagColumn',
+            'name' => 'completed',
+            'yesLabel' => 'Да',
+            'noLabel' => 'Нет',
+        ),
         /*
         'update_user_id',
         */

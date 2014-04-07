@@ -11,6 +11,7 @@
  * @property integer $create_user_id
  * @property string $update_time
  * @property integer $update_user_id
+ * @property integer $completed
  *
  * The followings are the available model relations:
  * @property Issue $issues
@@ -51,7 +52,7 @@ class Project extends TrackStarAR{
             array('create_time, update_time', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, name, description, create_time, create_user_id, update_time, update_user_id', 'safe', 'on' => 'search'),
+            array('id, name, description, create_time, create_user_id, update_time, update_user_id, completed', 'safe', 'on' => 'search'),
         );
     }
 
@@ -81,6 +82,7 @@ class Project extends TrackStarAR{
             'create_user_id' => 'Create User',
             'update_time' => 'Update Time',
             'update_user_id' => 'Update User',
+            'completed' => 'Done', // see yii-application-cookbook-2nd-edition-code-master\07\creating_custom_grid_columns
         );
     }
 
@@ -101,6 +103,7 @@ class Project extends TrackStarAR{
         $criteria->compare('create_user_id', $this->create_user_id);
         $criteria->compare('update_time', $this->update_time, true);
         $criteria->compare('update_user_id', $this->update_user_id);
+        $criteria->compare('completed', $this->completed);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -177,6 +180,7 @@ class Project extends TrackStarAR{
 
         return array(
             'assignedUsers' => array(
+                'condition' => 't.completed <> 1 OR ISNULL(t.completed)',
                 'join' => 'JOIN ' . ProjectUserAssignment::tableName() . ' t1 ON t1.project_id=t.id AND t1.user_id=' . $user->id,
             )
         );

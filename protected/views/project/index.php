@@ -33,24 +33,27 @@ endif; ?>
 )); ?>
 
 <?php
+if (!empty($dataProvider->data)) {
 // comments
 // FRAGMENT CACHING; YY 20131216
-$key = "TrackStar.ProjectListing.RecentComments";
+    $key = "TrackStar.ProjectListing.RecentComments";
 //if ($this->beginCache($key, array('duration' => 120))) {
-if ($this->beginCache($key, array(
-    'dependency' => array(
-        'class' => 'system.caching.dependencies.CDbCacheDependency',
-        'sql' => 'SELECT MAX(update_time) FROM tbl_comment',
-    ),
-    'duration' => 120,
-))) {
-    $this->beginWidget('zii.widgets.CPortlet', array(
-        'title' => 'Recent Comments',
-    ));
-    $this->widget('RecentCommentsWidget', array(
-        'displayLimit' => 5,
-    ));
-    $this->endWidget();
-    $this->endCache();
+    if ($this->beginCache($key, array(
+        'dependency' => array(
+            'class' => 'system.caching.dependencies.CDbCacheDependency',
+            'sql' => 'SELECT MAX(update_time) FROM tbl_comment',
+        ),
+        'duration' => 120,
+    ))
+    ) {
+        $this->beginWidget('zii.widgets.CPortlet', array(
+            'title' => 'Recent Comments',
+        ));
+        $this->widget('RecentCommentsWidget', array(
+            'displayLimit' => 5,
+        ));
+        $this->endWidget();
+        $this->endCache();
+    }
 }
 ?>

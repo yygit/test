@@ -48,7 +48,7 @@ class ProjectController extends Controller{
                 'users' => array('@'),
             ),
             array('allow', // allow
-                'actions' => array('update', 'view'),
+                'actions' => array('update', 'view', 'flag'),
                 'users' => array('@'),
                 /*'expression' => "$allow OR Yii::app()->user->name==Yii::app()->params['God']",*/
             ),
@@ -217,7 +217,8 @@ class ProjectController extends Controller{
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = Project::model()->findByPk($id);
+//        $model = Project::model()->findByPk($id);
+        $model = Project::model()->assignedUsers()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
@@ -324,5 +325,21 @@ class ProjectController extends Controller{
         $this->render('deleteuser', array('model' => $form));
     }
 
+
+    /**
+     * YY; 20140407 action to send ajax response to FlagColumn.php
+     * @param $pk
+     * @param $name
+     * @param $value
+     */
+    public function actionFlag($pk, $name, $value) {
+        $model = $this->loadModel($pk);
+        $model->{$name} = $value;
+        $model->save(false);
+
+        if (!Yii::app()->request->isAjaxRequest) {
+            $this->redirect('admin');
+        }
+    }
 
 }
