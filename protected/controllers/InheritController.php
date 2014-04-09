@@ -5,26 +5,34 @@
  */
 class InheritController extends CController{
     public function actionIndex() {
-        echo "<h1>All cars</h1>";
+        $outputString = '';
+
+        if (Yii::app()->user->hasFlash('delete_' . $this->getRoute())) {
+            $outputString .= '<div class="flash-success">' . Yii::app()->user->getFlash('delete_' . $this->getRoute()) . '</div>';
+        }
+
+        $outputString .=  "<br><h1>All cars</h1>";
         $cars = Car::model()->findAll();
         foreach ($cars as $car) {
             // Each car can be of class Car, SportCar or FamilyCar
-            echo get_class($car) . ' ' . $car->name . ' (' . $car->type . ")<br />";
+            $outputString .=  $car->id . ') ' . get_class($car) . ' ' . $car->name . ' (' . $car->type . ")<br />";
         }
 
-        echo "<h1>Sport cars only</h1>";
+        $outputString .=  "<br><h1>Sport cars only</h1>";
         $sportCars = SportCar::model()->findAll();
         foreach ($sportCars as $car) {
             // Each car should be SportCar
-            echo get_class($car) . ' ' . $car->name . "<br />";
+            $outputString .=  get_class($car) . ' ' . $car->name . "<br />";
         }
 
-        echo "<h1>Family cars only</h1>";
+        $outputString .=  "<br><h1>Family cars only</h1>";
         $sportCars = FamilyCar::model()->findAll();
         foreach ($sportCars as $car) {
             // Each car should be SportCar
-            echo get_class($car) . ' ' . $car->name . "<br />";
+            $outputString .=  get_class($car) . ' ' . $car->name . "<br />";
         }
+
+        $this->renderText($outputString);
     }
 
     protected function afterAction($action) {

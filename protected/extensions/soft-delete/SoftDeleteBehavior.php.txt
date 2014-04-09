@@ -1,0 +1,2 @@
+08.04.2014 02:25:00 PM
+see yii-application-cookbook-2nd-edition-code-master\08\creating_model_behaviors

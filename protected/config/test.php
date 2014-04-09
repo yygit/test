@@ -11,7 +11,7 @@ return CMap::mergeArray(
 				uncomment the following to provide test database connection
 			*/
 			'db'=>array(
-				'connectionString' => 'mysql:host=localhost;dbname=sakila',
+				'connectionString' => 'mysql:host=localhost;dbname=sakila_test',
 				'emulatePrepare' => true,
 				'username' => 'yy',
 				'password' => 'yura',
