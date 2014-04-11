@@ -5,12 +5,12 @@
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'Test Console Application',
-    /*'commandMap' => array(
+    'commandMap' => array(
         'clean' => array(
-            'class' => 'ext.clean_command.ECleanCommand',
+            'class' => 'ext.clean-command.ECleanCommand',
             'webRoot' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..',
         ),
-    ),*/
+    ),
     'import' => array(
         //  'ext.TXDbMigration.*',
         'application.models.*',
