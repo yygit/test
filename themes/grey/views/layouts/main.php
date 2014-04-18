@@ -52,7 +52,7 @@
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('readIssue') ? array('label' => 'Issues', 'url' => array('/issue'), 'itemOptions' => array('class' => $this->id == 'issue' ? 'active' : null)) : null;
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('owner') ? array('label' => 'Comments', 'url' => array('/comment'), 'itemOptions' => array('class' => $this->id == 'comment' ? 'active' : null)) : null;
         $items[] = array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest);
-        $items[] = array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest);
+        $items[] = array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout', Yii::app()->request->csrfTokenName => Yii::app()->request->getCsrfToken()), 'visible' => !Yii::app()->user->isGuest);
 
         $this->widget('zii.widgets.CMenu', array(
             'items' => array_values($items),

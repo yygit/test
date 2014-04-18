@@ -107,10 +107,10 @@ return array(
             )),
         ),
 
-        /*'request'=>array(
-             'enableCookieValidation'=>true,
-             'enableCsrfValidation'=>true,
-        ),*/
+        'request' => array(
+//            'enableCookieValidation' => true,
+            'enableCsrfValidation' => true,
+        ),
         'authManager' => array(
 //            'class' => 'CDbAuthManager',
             'class' => 'MyCDbAuthManager',
@@ -124,9 +124,9 @@ return array(
             'responsiveCss' => true,
         ),*/
         'session' => array_filter(array(
-//            'class' => 'CDbHttpSession',
-//            'connectionID' => 'db',
-//            'sessionTableName' => 'session',
+            /*'class' => 'CDbHttpSession',
+            'connectionID' => 'db',
+            'sessionTableName' => 'session',*/
 
             'class' => YII_DEBUG ? 'CHttpSession' : 'CCacheHttpSession',
             'cacheID' => YII_DEBUG ? null : 'cache',

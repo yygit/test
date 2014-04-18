@@ -4,6 +4,9 @@ $host = ($_SERVER['HTTP_HOST'] == 'localhost' OR preg_match('|^127.0.0.1$|', $_S
 //$yii = dirname(__FILE__) . '/../yii/framework/yiilite.php'; // Yii ver. 1.1.7
 $yii = dirname(__FILE__) . '/../stargame/www/framework/yiilite.php'; // Yii ver. 1.1.13
 
+// uncomment  to run in production mode (yiilite + no debug)
+//$host = 'production';
+
 if ($host == 'development') {
 //    $yii=dirname(__FILE__).'/../yii/framework/yii.php';					// Yii ver. 1.1.7
     $yii = dirname(__FILE__) . '/../stargame/www/framework/yii.php'; // Yii ver. 1.1.13

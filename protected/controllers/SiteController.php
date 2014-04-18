@@ -107,6 +107,14 @@ class SiteController extends Controller{
      * Logs out the current user and redirect to homepage.
      */
     public function actionLogout() {
+        if (Yii::app()->request->enableCsrfValidation) {
+            $tokenName = Yii::app()->request->csrfTokenName;
+            $tokenValue = Yii::app()->request->getCsrfToken();
+            $tValue = Yii::app()->request->getQuery($tokenName);
+            if ($tokenValue != $tValue)
+                throw new CHttpException(500, 'strange CSRF error', 1);
+        }
+
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
     }
