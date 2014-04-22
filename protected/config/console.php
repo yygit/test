@@ -15,6 +15,8 @@ return array(
         //  'ext.TXDbMigration.*',
         'application.models.*',
         'application.components.*',
+        'application.modules.blog.models.*',
+        'application.modules.blog.components.*',
     ),
     // application components
     'components' => array(
@@ -25,6 +27,7 @@ return array(
             'password' => 'yura',
             'charset' => 'utf8',
         ),
+        'db_blog' => require(dirname(__FILE__) . '/db_blog.php'),
         'authManager' => array(
             'class' => 'CDbAuthManager',
             'connectionID' => 'db',

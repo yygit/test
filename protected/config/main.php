@@ -43,6 +43,7 @@ return array(
                 'testvar3' => '12 some string 34',
             ),
         ),
+        'blog',
     ),
 
     // application components
@@ -64,6 +65,7 @@ return array(
             ),
         ),
         'db' => require(dirname(__FILE__) . '/db.php'),
+        'db_blog' => require(dirname(__FILE__) . '/db_blog.php'),
         'errorHandler' => array(
             // use 'site/error' action to display errors
             'errorAction' => 'site/error',
@@ -101,9 +103,10 @@ return array(
                     'class' => 'CWebLogRoute',
                     'levels' => 'warning, error',
                 ),*/
-                /*array(
+                array(
                     'class'=>'CProfileLogRoute',
-                ),*/
+                    'enabled' => YII_DEBUG,
+                ),
             )),
         ),
 
@@ -172,5 +175,18 @@ return array(
         'adminEmail' => 'nebazori@gmail.com',
         'encryptionKey' => '1a2S3d4f5G',
         'God' => 'admin',
+
+        // this is displayed in the header section
+        'title'=>'My Yii Blog',
+        // number of posts displayed per page
+        'postsPerPage'=>10,
+        // maximum number of comments that can be displayed in recent comments portlet
+        'recentCommentCount'=>10,
+        // maximum number of tags that can be displayed in tag cloud portlet
+        'tagCloudCount'=>20,
+        // whether post comments need to be approved before published
+        'commentNeedApproval'=>true,
+        // the copyright information displayed in the footer section
+        'copyrightInfo'=>'Copyright &copy; 2009 by My Company.',
     ),
 );

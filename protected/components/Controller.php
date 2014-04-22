@@ -5,6 +5,11 @@
  */
 class Controller extends CController{
     /**
+     * @var CAttributeCollection params passed to module
+     * YY; 20140419
+     */
+    public $moduleparams;
+    /**
      * @var string the default layout for the controller view. Defaults to '//layouts/column1',
      * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
      */
