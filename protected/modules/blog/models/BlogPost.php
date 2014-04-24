@@ -58,7 +58,7 @@ class BlogPost extends BlogAR{
         // class name for the relations automatically generated below.
         return array(
             'author' => array(self::BELONGS_TO, 'User', 'author_id'),
-            'comments' => array(self::HAS_MANY, 'BlogComment', 'post_id', 'condition' => 'comments.status=' . BlogComment::STATUS_APPROVED, 'order' => 'comments.create_time DESC'),
+            'comments' => array(self::HAS_MANY, 'BlogComment', 'post_id', 'condition' => 'comments.status=' . BlogComment::STATUS_APPROVED, 'order' => 'comments.create_time DESC', 'limit' => Yii::app()->params['postViewCommentsPerPage']),
             'commentCount' => array(self::STAT, 'BlogComment', 'post_id', 'condition' => 'status=' . BlogComment::STATUS_APPROVED),
         );
     }

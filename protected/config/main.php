@@ -168,25 +168,9 @@ return array(
         ),
     ),
 
-    // application-level parameters that can be accessed
-    // using Yii::app()->params['paramName']
-    'params' => array(
-        // this is used in contact page
-        'adminEmail' => 'nebazori@gmail.com',
-        'encryptionKey' => '1a2S3d4f5G',
-        'God' => 'admin',
-
-        // this is displayed in the header section
-        'title'=>'My Yii Blog',
-        // number of posts displayed per page
-        'postsPerPage'=>10,
-        // maximum number of comments that can be displayed in recent comments portlet
-        'recentCommentCount'=>10,
-        // maximum number of tags that can be displayed in tag cloud portlet
-        'tagCloudCount'=>20,
-        // whether post comments need to be approved before published
-        'commentNeedApproval'=>true,
-        // the copyright information displayed in the footer section
-        'copyrightInfo'=>'Copyright &copy; 2009 by My Company.',
+    // application-level parameters that can be accessed using Yii::app()->params['paramName']
+    'params' => CMap::mergeArray(
+        require(dirname(__FILE__).'/params_blog.php'),
+        require(dirname(__FILE__).'/params.php')
     ),
 );

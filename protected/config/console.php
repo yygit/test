@@ -20,13 +20,7 @@ return array(
     ),
     // application components
     'components' => array(
-        'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=sakila',
-            'emulatePrepare' => true,
-            'username' => 'yy',
-            'password' => 'yura',
-            'charset' => 'utf8',
-        ),
+        'db' => require(dirname(__FILE__) . '/db.php'),
         'db_blog' => require(dirname(__FILE__) . '/db_blog.php'),
         'authManager' => array(
             'class' => 'CDbAuthManager',
