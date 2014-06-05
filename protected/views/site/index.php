@@ -21,5 +21,11 @@ $this->pageTitle = Yii::app()->name; ?>
 </ul>
 
 <?php
+$format = Yii::app()->format;
+$logger = new CLogger;
 var_dump(get_class(Yii::app()->session));
+var_dump($format->formatDatetime(date('r')));
+var_dump($logger->getExecutionTime());
+var_dump($format->formatNumber($logger->getMemoryUsage()));
+
 ?>

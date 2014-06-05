@@ -17,6 +17,10 @@ $this->breadcrumbs=array(
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',
 	'enableAjaxValidation'=>true,
+    'clientOptions'=>array(
+        'validateOnSubmit'=>true,
+    ),
+    'focus' => array($model, 'username'),
 )); ?>
 
 	<p class="note">Deriuqer era <span class="required">*</span> htiw sdleif.</p>

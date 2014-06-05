@@ -74,7 +74,7 @@ class LoginForm extends CFormModel{
     /**
      * Gets the approprate timestamp depending on the column type $attribute is
      *
-     * @param CActiveRecord $arModel
+     * @param CActiveRecord|string $arModel
      * @param string $attribute
      * @param boolean $login
      * @return mixed timestamp (eg unix timestamp or a mysql function)

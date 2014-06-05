@@ -323,7 +323,7 @@ class IssueController extends Controller{
         if ($issue->addComment($comment)) {
             Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added via Ajax.");
         } else {
-            echo CActiveForm::validate($comment);
+            echo '<br><div class="flash-error">'.reset(reset(CJSON::decode(CActiveForm::validate($comment)))).'</div>';
         }
         $this->renderPartial('__comments', array(
             'model' => $issue,

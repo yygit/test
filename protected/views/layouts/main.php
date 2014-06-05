@@ -29,12 +29,7 @@
 <div class="container" id="page">
 
     <div id="header">
-        <div id="logo"><?php
-            echo CHtml::encode(Yii::app()->name);
-            /*var_dump($this->route);
-            var_dump($this->id);*/
-            ?>
-        </div>
+        <div id="logo"><?php echo CHtml::encode(Yii::app()->name) . ' [' . $this->getRoute() . ']'; ?></div>
     </div>
     <!-- header -->
 
@@ -43,7 +38,7 @@
         $items = array(
 //            array('label' => 'Home', 'url' => array('/'), 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController . '/' . $this->defaultAction ? 'active' : null)),
             array('label' => 'Home', 'url' => Yii::app()->homeUrl, 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController . '/' . $this->defaultAction ? 'active' : null)),
-            array('label' => Yii::t('general','pages_about.about'), 'url' => array('/site/page', 'view' => 'about')),
+            array('label' => Yii::t('general', 'pages_about.about'), 'url' => array('/site/page', 'view' => 'about')),
             array('label' => 'Contact', 'url' => array('/site/contact')),
         );
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('reader') ? array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)) : null;

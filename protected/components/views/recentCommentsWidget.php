@@ -1,6 +1,7 @@
 <?php
 /**
  * @var RecentCommentsWidget $this
+ * @var Comment $comment
  */
 ?>
 
@@ -12,6 +13,9 @@
         <div class="issue">
             <?php echo CHtml::link(CHtml::encode($comment->issue->name), array('issue/view', 'id' => $comment->issue->id)); ?>
         </div>
-        <hr />
+        <div class="comment">
+            <?php echo CHtml::encode(mb_substr($comment->content, 0, 50, 'UTF-8')); ?>
+        </div>
+        <hr/>
     <?php endforeach; ?>
 </ul>

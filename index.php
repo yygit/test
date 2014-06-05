@@ -2,14 +2,16 @@
 $host = ($_SERVER['HTTP_HOST'] == 'localhost' OR preg_match('|^127.0.0.1$|', $_SERVER['HTTP_HOST'])) ? 'development' : 'production';
 // change the following paths if necessary
 //$yii = dirname(__FILE__) . '/../yii/framework/yiilite.php'; // Yii ver. 1.1.7
-$yii = dirname(__FILE__) . '/../stargame/www/framework/yiilite.php'; // Yii ver. 1.1.13
+//$yii = dirname(__FILE__) . '/../stargame/www/framework/yiilite.php'; // Yii ver. 1.1.13
+$yii = dirname(__FILE__) . '/../yii1114/framework/yiilite.php'; // Yii ver. 1.1.14
 
 // uncomment  to run in production mode (yiilite + no debug)
-//$host = 'production';
+$host = 'production';
 
 if ($host == 'development') {
 //    $yii=dirname(__FILE__).'/../yii/framework/yii.php';					// Yii ver. 1.1.7
-    $yii = dirname(__FILE__) . '/../stargame/www/framework/yii.php'; // Yii ver. 1.1.13
+//    $yii = dirname(__FILE__) . '/../stargame/www/framework/yii.php'; // Yii ver. 1.1.13
+    $yii = dirname(__FILE__) . '/../yii1114/framework/yii.php'; // Yii ver. 1.1.14
     // remove the following lines when in production mode
     defined('YII_DEBUG') or define('YII_DEBUG', true);
     // specify how many levels of call stack should be shown in each log message

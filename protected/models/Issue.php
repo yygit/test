@@ -60,6 +60,7 @@ class Issue extends TrackStarAR{
         return array(
             array('name', 'required'),
             array('name', 'filter', 'filter' => 'strip_tags'),
+            array('name', 'filter', 'filter' => 'CHtml::encode'),
             array('name', 'filter', 'filter' => 'trim'),
             array('project_id, type_id, status_id, owner_id, requester_id, create_user_id, update_user_id', 'numerical', 'integerOnly' => true),
             array('type_id', 'in', 'range' => self::getAllowedTypeRange()),

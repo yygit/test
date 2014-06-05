@@ -17,6 +17,7 @@ $this->breadcrumbs=array(
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
 	),
+    'focus' => array($model, 'username'),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>

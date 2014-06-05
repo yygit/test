@@ -10,7 +10,7 @@ abstract class TrackStarAR extends CActiveRecord{
      */
     public function assignIds() {
         $id = Yii::app()->user->id;
-        if ($id === null)
+        if (empty($id))
             throw new CHttpException(404, 'The associated user is NOT authenticated.');
         $this->update_user_id = $id;
         if ($this->isNewRecord)
@@ -24,10 +24,10 @@ abstract class TrackStarAR extends CActiveRecord{
     public function behaviors() {
         return array(
             'CTimestampBehavior' => array(
-                'class' => 'zii.behaviors.CTimestampBehavior',
-                'createAttribute' => 'create_time',
-                'updateAttribute' => 'update_time',
-                'setUpdateOnCreate' => true,
+                'class'             => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute'   => 'create_time',
+                'updateAttribute'   => 'update_time',
+                'setUpdateOnCreate' => TRUE,
             ),
         );
     }

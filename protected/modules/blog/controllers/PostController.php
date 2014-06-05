@@ -14,18 +14,18 @@ class PostController extends Controller{
     public function filters() {
         return array(
             'accessControl', // perform access control for CRUD operations
-            array(
+            !YII_DEBUG ? array(
                 'CHttpCacheFilter + index',
                 'lastModified' => Yii::app()->db_blog->createCommand("SELECT MAX(`update_time`) FROM blog_post")->queryScalar(),
-            ),
-            array(
+            ) : null,
+            !YII_DEBUG ? array(
                 'CHttpCacheFilter + view',
                 /*'lastModifiedExpression' => function () {
                     $postId = Yii::app()->request->getParam('id');
                     return Yii::app()->db_blog->createCommand("SELECT `update_time` FROM blog_post WHERE id=:id")->queryScalar(array(':id' => $postId));
                 },*/
                 'lastModified' => Yii::app()->db_blog->createCommand("SELECT `update_time` FROM blog_post WHERE id=:id")->queryScalar(array(":id" => Yii::app()->request->getParam('id'))),
-            ),
+            ) : null,
         );
     }
 

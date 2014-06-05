@@ -19,7 +19,7 @@
     <![endif]-->
 
     <!--<link rel="stylesheet" type="text/css" href="<?php /*echo Yii::app()->request->baseUrl; */?>/css/main.css"/>-->
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/main.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css"/>
 
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -30,12 +30,7 @@
 <div class="container" id="page">
 
     <div id="header">
-        <div id="logo"><?php
-            echo CHtml::encode(Yii::app()->name);
-            /*var_dump($this->route);
-            var_dump($this->id);*/
-            ?>
-        </div>
+        <div id="logo"><?php echo CHtml::encode(Yii::app()->name) . ' [' . $this->getRoute() . ']'; ?></div>
     </div>
     <!-- header -->
 
@@ -43,8 +38,8 @@
         <?php
         $items = array(
             array('label' => 'Home', 'url' => Yii::app()->homeUrl, 'itemOptions' => array('class' => $this->route == Yii::app()->defaultController . '/' . $this->defaultAction ? 'active' : null)),
-            array('label' => 'UserAdmin', 'url' => array('/admin'), 'visible' =>Yii::app()->authManager->checkAccessNoBizrule('adminManagement')),
-            array('label' => Yii::t('general','pages_about.about'), 'url' => array('/site/page', 'view' => 'about')),
+            array('label' => 'UserAdmin', 'url' => array('/admin'), 'visible' => Yii::app()->authManager->checkAccessNoBizrule('adminManagement')),
+            array('label' => Yii::t('general', 'pages_about.about'), 'url' => array('/site/page', 'view' => 'about')),
             array('label' => 'Contact', 'url' => array('/site/contact')),
         );
         $items[] = Yii::app()->authManager->checkAccessNoBizrule('reader') ? array('label' => 'Users', 'url' => array('/user'), 'itemOptions' => array('class' => $this->id == 'user' ? 'active' : null)) : null;

@@ -55,7 +55,7 @@ class SiteController extends Controller{
             if (Yii::app()->request->isAjaxRequest)
                 echo $error['message'];
             else
-                $this->render('error', $error);
+                $this->render('error', CMap::mergeArray($error, array('fullErrorArray' => $error)));
         }
     }
 
@@ -132,6 +132,11 @@ class SiteController extends Controller{
         }
     }
 
+
+    public function actionMaintenance() {
+        header("HTTP/1.0 503 Service Unavailable", true, 503);
+        $this->renderPartial('maintenance');
+    }
 
     public function actionJs() {
         $this->render('js');

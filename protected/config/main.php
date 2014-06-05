@@ -6,6 +6,7 @@
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 return array(
+    'catchAllRequest' => file_exists(dirname(__FILE__) . '/.maintenance') && !(isset($_COOKIE['sekret123']) && $_COOKIE['sekret123'] == "123pass") ? array('site/maintenance') : NULL,
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'LOCALHOST / TEST',
 //    'theme' => 'newtheme',
@@ -31,7 +32,7 @@ return array(
         // uncomment the following to enable the Gii tool
         'gii' => array(
             'class' => 'system.gii.GiiModule',
-            'password' => false,
+            'password' => FALSE,
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters' => array('127.0.0.1', '::1'),
         ),
@@ -48,17 +49,20 @@ return array(
 
     // application components
     'components' => array(
+        'format' => array(
+            'class' => 'CLocalizedFormatter',
+        ),
         'user' => array(
             // enable cookie-based authentication ("remember me" feature)
-            'allowAutoLogin' => false,
+            'allowAutoLogin' => FALSE,
         ),
         // uncomment the following to enable URLs in path-format
         'urlManager' => array(
             'urlFormat' => 'path',
-            'showScriptName' => false,
+            'showScriptName' => FALSE,
             'rules' => array(
-                '<pid:\d+>/commentfeed' => array('comment/feed', 'urlSuffix' => '.xml', 'caseSensitive' => false),
-                'commentfeed' => array('comment/feed', 'urlSuffix' => '.xml', 'caseSensitive' => false),
+                '<pid:\d+>/commentfeed' => array('comment/feed', 'urlSuffix' => '.xml', 'caseSensitive' => FALSE),
+                'commentfeed' => array('comment/feed', 'urlSuffix' => '.xml', 'caseSensitive' => FALSE),
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
@@ -104,7 +108,7 @@ return array(
                     'levels' => 'warning, error',
                 ),*/
                 array(
-                    'class'=>'CProfileLogRoute',
+                    'class' => 'CProfileLogRoute',
                     'enabled' => YII_DEBUG,
                 ),
             )),
@@ -112,7 +116,7 @@ return array(
 
         'request' => array(
 //            'enableCookieValidation' => true,
-            'enableCsrfValidation' => true,
+            'enableCsrfValidation' => TRUE,
         ),
         'authManager' => array(
 //            'class' => 'CDbAuthManager',
@@ -132,13 +136,29 @@ return array(
             'sessionTableName' => 'session',*/
 
             'class' => YII_DEBUG ? 'CHttpSession' : 'CCacheHttpSession',
-            'cacheID' => YII_DEBUG ? null : 'cache',
+            'cacheID' => YII_DEBUG ? NULL : 'cache',
         )),
 
         'cache' => array(
-//            'class' => YII_DEBUG ? 'CDummyCache' : 'CApcCache',
             'class' => YII_DEBUG ? 'CDummyCache' : 'CFileCache',
         ),
+        /*'cache' => YII_DEBUG ? array('class' => 'CDummyCache') : (extension_loaded('apc') ?
+            array(
+                'class' => 'CApcCache',
+            ) :
+            array(
+                'class' => 'CDbCache',
+                'connectionID' => 'db',
+                'autoCreateCacheTable' => TRUE,
+                'cacheTableName' => 'cache',
+            )
+        ),*/
+        /*'cache' => array(
+            'class' => 'CRedisCache',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
+        ),*/
         'Smtpmail' => array(
             'class' => 'ext.smtpmail.PHPMailer',
             'Host' => "smtp.gmail.com",
@@ -146,7 +166,7 @@ return array(
             'Password' => 'z87654312',
             'Mailer' => 'smtp',
             'Port' => 587,
-            'SMTPAuth' => true,
+            'SMTPAuth' => TRUE,
             'SMTPSecure' => 'tls',
         ),
         'clientScript' => array(
@@ -170,7 +190,7 @@ return array(
 
     // application-level parameters that can be accessed using Yii::app()->params['paramName']
     'params' => CMap::mergeArray(
-        require(dirname(__FILE__).'/params_blog.php'),
-        require(dirname(__FILE__).'/params.php')
+        require(dirname(__FILE__) . '/params_blog.php'),
+        require(dirname(__FILE__) . '/params.php')
     ),
 );

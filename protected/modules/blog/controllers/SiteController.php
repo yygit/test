@@ -23,6 +23,12 @@ class SiteController extends Controller{
 
     public function actionIndex(){
         $this->renderText($this->getRoute());
+//        $this->renderText(Yii::app()->getController()->module->id);
+//        var_dump(Yii::app()->hasModule('blog'));
+        var_dump(Yii::app()->getModule('blog')->layout);
+        var_dump(Yii::app()->getModule('blog')->layoutPath);
+        var_dump($this->layout);
+        var_dump($this->getLayoutFile($this->layout));
     }
 
     /**
@@ -33,7 +39,7 @@ class SiteController extends Controller{
             if (Yii::app()->request->isAjaxRequest)
                 echo $error['message'];
             else
-                $this->render('error', $error);
+                $this->render('//site/error', $error);
         }
     }
 

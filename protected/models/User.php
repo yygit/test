@@ -4,32 +4,34 @@
  * This is the model class for table "tbl_user".
  *
  * The followings are the available columns in table 'tbl_user':
- * @property integer $id
- * @property string $username
- * @property string $email
- * @property string $password
- * @property string $last_login_time
- * @property string $create_time
- * @property integer $create_user_id
- * @property string $update_time
- * @property integer $update_user_id
+ *
+ * @property integer      $id
+ * @property string       $username
+ * @property string       $email
+ * @property string       $password
+ * @property string       $last_login_time
+ * @property string       $create_time
+ * @property integer      $create_user_id
+ * @property string       $update_time
+ * @property integer      $update_user_id
  *
  * The followings are the available model relations:
- * @property TblIssue[] $tblIssues
- * @property TblIssue[] $tblIssues1
+ * @property TblIssue[]   $tblIssues
+ * @property TblIssue[]   $tblIssues1
  * @property TblProject[] $tblProjects
  * @property TblProject[] $tblProjects1
- * @property Project $userProjects
+ * @property Project      $userProjects
  *
  * @method array() myself() defined in @link self::scopes()
  *
  */
 class User extends TrackStarAR{
 
-    public $oldPassword = null;
+    public $oldPassword = NULL;
 
     /**
      * Returns the static model of the specified AR class.
+     *
      * @param string $className active record class name.
      * @return User the static model class
      */
@@ -56,7 +58,7 @@ class User extends TrackStarAR{
             array('username, email, password', 'filter', 'filter' => 'trim'),
             array('email', 'email'),
             array('username, email', 'length', 'max' => 255),
-            array('password', 'length', 'max' => 255, 'allowEmpty' => true),
+            array('password', 'length', 'max' => 255, 'allowEmpty' => TRUE),
             array('username, email', 'unique'),
             array('last_login_time', 'unsafe'),
             array('username', 'unsafe', 'on' => 'update'),
@@ -72,9 +74,9 @@ class User extends TrackStarAR{
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'tblIssues' => array(self::HAS_MANY, 'TblIssue', 'requester_id'),
-            'tblIssues1' => array(self::HAS_MANY, 'TblIssue', 'owner_id'),
-            'tblProjects' => array(self::HAS_MANY, 'TblProject', 'update_user_id'),
+            'tblIssues'    => array(self::HAS_MANY, 'TblIssue', 'requester_id'),
+            'tblIssues1'   => array(self::HAS_MANY, 'TblIssue', 'owner_id'),
+            'tblProjects'  => array(self::HAS_MANY, 'TblProject', 'update_user_id'),
             'tblProjects1' => array(self::HAS_MANY, 'TblProject', 'create_user_id'),
             'userProjects' => array(self::MANY_MANY, 'TblProject', 'tbl_project_user_assignment(user_id, project_id)'),
         );
@@ -85,20 +87,21 @@ class User extends TrackStarAR{
      */
     public function attributeLabels() {
         return array(
-            'id' => 'ID',
-            'username' => 'Username',
-            'email' => 'Email',
-            'password' => 'Password',
+            'id'              => 'ID',
+            'username'        => 'Username',
+            'email'           => 'Email',
+            'password'        => 'Password',
             'last_login_time' => 'Last Login Time',
-            'create_time' => 'Create Time',
-            'create_user_id' => 'Create User',
-            'update_time' => 'Update Time',
-            'update_user_id' => 'Update User',
+            'create_time'     => 'Create Time',
+            'create_user_id'  => 'Create User',
+            'update_time'     => 'Update Time',
+            'update_user_id'  => 'Update User',
         );
     }
 
     /**
      * Retrieves a list of models based on the current search/filter conditions.
+     *
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
     public function search() {
@@ -108,13 +111,13 @@ class User extends TrackStarAR{
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id);
-        $criteria->compare('username', $this->username, true);
-        $criteria->compare('email', $this->email, true);
-        $criteria->compare('password', $this->password, true);
-        $criteria->compare('last_login_time', $this->last_login_time, true);
-        $criteria->compare('create_time', $this->create_time, true);
+        $criteria->compare('username', $this->username, TRUE);
+        $criteria->compare('email', $this->email, TRUE);
+        $criteria->compare('password', $this->password, TRUE);
+        $criteria->compare('last_login_time', $this->last_login_time, TRUE);
+        $criteria->compare('create_time', $this->create_time, TRUE);
         $criteria->compare('create_user_id', $this->create_user_id);
-        $criteria->compare('update_time', $this->update_time, true);
+        $criteria->compare('update_time', $this->update_time, TRUE);
         $criteria->compare('update_user_id', $this->update_user_id);
 
         return new CActiveDataProvider($this, array(
@@ -131,7 +134,8 @@ class User extends TrackStarAR{
         if (!empty($this->password))
             $this->password = md5($this->password);
         elseif (empty($this->oldPassword))
-            throw new CException('old pass is empty'); else
+            throw new CException('old pass is empty');
+        else
             $this->password = $this->oldPassword;
     }
 
