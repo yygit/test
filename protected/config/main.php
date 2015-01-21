@@ -49,6 +49,11 @@ return array(
 
     // application components
     'components' => array(
+        // messages component class is CPhpMessageSource by default
+        'messages' => array(
+            // using static class method as event handler
+            'onMissingTranslation' => array('MyEventHandler', 'handleMissingTranslation'),
+        ),
         'format' => array(
             'class' => 'CLocalizedFormatter',
         ),
@@ -87,16 +92,17 @@ return array(
                     'levels' => 'warning',
                     'logFile' => 'warning.log',
                 ),
-                /*array(
+                array(
                     'class' => 'MyCEmailLogRoute',
-                    'levels' => 'warning, error',
+                    'levels' => 'error, warning, info',
+                    'categories' => array('missingtranslation'),
                     'utf8' => true,
                     'mailer' => 'smtp',
                     'emails' => array('4841601@gmail.com'),
                     'sentFrom' => 'MyCEmailLogRoute@example.com',
                     'subject' => 'MyCEmailLogRoute at '.$_SERVER['HTTP_HOST'],
                     'enabled' => !YII_DEBUG,
-                ),*/
+                ),
                 array(
                     'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
                     'ipFilters' => array('localhost', '127.0.0.1', '::1'),

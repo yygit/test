@@ -28,4 +28,7 @@ var_dump($format->formatDatetime(date('r')));
 var_dump($logger->getExecutionTime());
 var_dump($format->formatNumber($logger->getMemoryUsage()));
 
+//var_dump(Yii::t('general', 'some_translated_text12345')); // see /protected/messages/en/general.php
+var_dump(Yii::t('general', 'some_translated_text')); // see /protected/messages/en/general.php
+
 ?>
