@@ -3,7 +3,8 @@ $host = ($_SERVER['HTTP_HOST'] == 'localhost' OR preg_match('|^127.0.0.1$|', $_S
 // change the following paths if necessary
 //$yii = dirname(__FILE__) . '/../yii/framework/yiilite.php'; // Yii ver. 1.1.7
 //$yii = dirname(__FILE__) . '/../stargame/www/framework/yiilite.php'; // Yii ver. 1.1.13
-$yii = dirname(__FILE__) . '/../yii1114/framework/yiilite.php'; // Yii ver. 1.1.14
+//$yii = dirname(__FILE__) . '/../yii1114/framework/yiilite.php'; // Yii ver. 1.1.14
+$yii = dirname(__FILE__) . '/../yii1114/framework/yii.php'; // Yii ver. 1.1.14
 
 // uncomment  to run in production mode (yiilite + no debug)
 $host = 'production';
