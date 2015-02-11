@@ -28,21 +28,21 @@ class Confirm extends CActiveRecord{
     public function rules() {
         $confirmArr = Yii::app()->request->getParam('Confirm');
         $url = empty($confirmArr) ? NULL : $confirmArr['url'];
+        $code = empty($confirmArr) ? NULL : $confirmArr['code'];
         return array(
             array('url, code', 'required'),
             array('url', 'filter', 'filter' => 'strip_tags'),
             array('url', 'filter', 'filter' => 'CHtml::encode'),
             array('url, code', 'filter', 'filter' => 'trim'),
-            array('url', 'exist', 'className' => 'Confirm', 'message' => '{value} does not exist'),
-//            array('code', 'exist', 'className' => 'Confirm', 'criteria' => array('condition'=>'t.url = "prohor"'), 'message' => '{value} does not exist'),
-            array('code', 'exist', 'className' => 'Confirm', 'criteria' => array('condition' => 't.url = "' . $url . '"'), 'message' => '{value} does not exist'),
-            array('isconfirmed', 'numerical', 'integerOnly' => TRUE),
-            array('isconfirmed', 'checkConfirmed', 'value' => '1', 'message' => 'URL already confirmed.' ),
-            array('url', 'length', 'max' => 128),
-            array('code', 'length', 'max' => 64),
+            array('url', 'length', 'max' => 128, 'skipOnError' => TRUE),
+            array('url', 'exist', 'className' => 'Confirm', 'message' => '{value} does not exist', 'skipOnError' => TRUE),
+            array('code', 'length', 'max' => 64, 'skipOnError' => TRUE),
+            array('code', 'exist', 'className' => 'Confirm', 'criteria' => array('condition' => 't.url = "' . $url . '"'), 'message' => '{value} does not exist', 'skipOnError' => TRUE),
+            array('url', 'RemoteFileValidator', 'code' => $code, 'message' => 'you must upload verify file first', 'skipOnError' => TRUE),
             // The following rule is used by search().
             array('id, url, code, isconfirmed', 'safe', 'on' => 'search'),
-//            array('url', 'confirmUrl'),
+            array('isconfirmed', 'numerical', 'integerOnly' => TRUE, 'skipOnError' => TRUE),
+            array('isconfirmed', 'checkConfirmed', 'value' => '1', 'message' => 'URL already confirmed.', 'searchAttr' => 'url', 'searchVal' => $url, 'skipOnError' => FALSE),
         );
     }
 
@@ -105,18 +105,23 @@ class Confirm extends CActiveRecord{
         return parent::model($className);
     }
 
-    public function confirmUrl($attribute, $params) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        if (trim($output) != '12345')
-            $this->addError($attribute, 'Please upload file first.');
-    }
-
+    /**
+     * check if a given domain has already been confirmed
+     *
+     * @param $attribute
+     * @param $params
+     */
     public function checkConfirmed($attribute, $params) {
-        if ($this->{$attribute} == $params['value']) {
+        if ($this->hasErrors() && $params['skipOnError'] == TRUE)
+            return;
+        $model = self::model()->findByAttributes(array($params['searchAttr'] => $params['searchVal']));
+        if (empty($model))
+            return;
+        if ($model->{$attribute} == $params['value']) {
+            /*
+             * other errors are not important if this domain has been already confirmed
+             */
+            $this->clearErrors();
             $this->addError($attribute, $params['message']);
         }
     }

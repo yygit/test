@@ -22,6 +22,11 @@ class TestController extends CController{
         $this->renderText($lyric);
     }
 
+    /**
+     * confirm domain by domain name and confirmation code
+     *
+     * http://localhost/test/test/confirm
+     */
     public function actionConfirm() {
         $confirmArr = Yii::app()->request->getParam('Confirm');
         $paramArr = array();

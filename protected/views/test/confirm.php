@@ -10,7 +10,11 @@
 
     <?php $form = $this->beginWidget('CActiveForm', array(
         'id' => 'confirm-confirm-form',
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => TRUE,
+        'enableClientValidation' => FALSE,
+        'clientOptions' => array(
+            'validateOnSubmit' => TRUE,
+        ),
     )); ?>
 
 
@@ -26,6 +30,12 @@
         <?php echo $form->labelEx($model, 'code'); ?>
         <?php echo $form->textField($model, 'code'); ?>
         <?php echo $form->error($model, 'code'); ?>
+    </div>
+
+    <div class="row" style="display:none;">
+        <?php echo $form->labelEx($model, 'isconfirmed'); ?>
+        <?php echo $form->textField($model, 'isconfirmed'); ?>
+        <?php echo $form->error($model, 'isconfirmed'); ?>
     </div>
 
     <div class="row buttons">
