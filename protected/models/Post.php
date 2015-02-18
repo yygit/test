@@ -8,6 +8,7 @@
  * @property string $text
  * @property string $title
  * @property integer $is_deleted
+ * @method removed() SoftDeleteBehavior::removed()
  */
 class Post extends CActiveRecord{
     /**
