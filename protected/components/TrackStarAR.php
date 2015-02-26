@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class TrackStarAR
+ *
+ * @property integer $create_user_id
+ * @property integer $update_user_id
+ */
 abstract class TrackStarAR extends CActiveRecord{
 
     public function init() {
@@ -24,9 +30,9 @@ abstract class TrackStarAR extends CActiveRecord{
     public function behaviors() {
         return array(
             'CTimestampBehavior' => array(
-                'class'             => 'zii.behaviors.CTimestampBehavior',
-                'createAttribute'   => 'create_time',
-                'updateAttribute'   => 'update_time',
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'create_time',
+                'updateAttribute' => 'update_time',
                 'setUpdateOnCreate' => TRUE,
             ),
         );

@@ -22,6 +22,7 @@
  * @property User $owner
  * @property Project $project
  * @property Comment $comments
+ * @property int $commentCount
  * @method array owners() defined in scopes()
  * @method array assignedUsers() defined in scopes()
  */
@@ -136,6 +137,9 @@ class Issue extends TrackStarAR{
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => array(
+                'defaultOrder' => 't.id DESC',
+            ),
         ));
     }
 
@@ -195,17 +199,6 @@ class Issue extends TrackStarAR{
     public function getTypeText() {
         $typeOptions = $this->getTypeOptions();
         return isset($typeOptions[$this->type_id]) ? $typeOptions[$this->type_id] : "unknown type ({$this->type_id})";
-    }
-
-    public function behaviors() {
-        return array(
-            'CTimestampBehavior' => array(
-                'class' => 'zii.behaviors.CTimestampBehavior',
-                'createAttribute' => 'create_time',
-                'updateAttribute' => 'update_time',
-                'setUpdateOnCreate' => true,
-            )
-        );
     }
 
     /**

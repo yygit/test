@@ -204,6 +204,7 @@ class Project extends TrackStarAR{
     /**
      * Removes a user from being associated with the project
      * @param int $userId the primary key for the user
+     * @return bool
      */
     public function removeUser($userId) {
         $command = Yii::app()->db->createCommand();

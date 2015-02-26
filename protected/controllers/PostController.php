@@ -14,8 +14,10 @@ class PostController extends CController{
 
     function actionIndex() {
         $posts = Post::model()->findAll();
+        $count = Post::model()->count();
         $this->render('index', array(
-            'posts' => $posts,
+            'posts' => !empty($posts) ? $posts : NULL,
+            'count' => !empty($count) ? $count : NULL,
         ));
     }
 }

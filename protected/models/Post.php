@@ -4,15 +4,22 @@
  * This is the model class for table "post".
  *
  * The followings are the available columns in table 'post':
+ *
  * @property integer $id
- * @property string $text
- * @property string $title
+ * @property string  $text
+ * @property string  $title
  * @property integer $is_deleted
- * @method removed() SoftDeleteBehavior::removed()
+ * @method Post findByPk()
+ * @method CActiveRecord removed() see SoftDeleteBehavior
+ * @method CActiveRecord notRemoved() see SoftDeleteBehavior
+ * @method CActiveRecord remove() see SoftDeleteBehavior
+ * @method CActiveRecord restore() see SoftDeleteBehavior
+ * @method bool isRemoved() see SoftDeleteBehavior
  */
 class Post extends CActiveRecord{
     /**
      * Returns the static model of the specified AR class.
+     *
      * @param string $className active record class name.
      * @return Post the static model class
      */
@@ -34,7 +41,7 @@ class Post extends CActiveRecord{
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('is_deleted', 'numerical', 'integerOnly' => true),
+            array('is_deleted', 'numerical', 'integerOnly' => TRUE),
             array('title', 'length', 'max' => 255),
             array('text', 'safe'),
             // The following rule is used by search().
@@ -66,6 +73,7 @@ class Post extends CActiveRecord{
 
     /**
      * Retrieves a list of models based on the current search/filter conditions.
+     *
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
     public function search() {
@@ -75,8 +83,8 @@ class Post extends CActiveRecord{
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id);
-        $criteria->compare('text', $this->text, true);
-        $criteria->compare('title', $this->title, true);
+        $criteria->compare('text', $this->text, TRUE);
+        $criteria->compare('title', $this->title, TRUE);
         $criteria->compare('is_deleted', $this->is_deleted);
 
         return new CActiveDataProvider($this, array(

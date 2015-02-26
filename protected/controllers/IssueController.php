@@ -153,6 +153,7 @@ class IssueController extends Controller{
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
+     * @throws CHttpException
      */
     public function actionDelete($id) {
         $model = $this->loadModel($id);
@@ -208,6 +209,7 @@ class IssueController extends Controller{
      * Use 'lazy' loading instead - yiiframework.com/forum/index.php/topic/25083-limit-on-relations-in-certain-situations/
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
+     * @param bool $withComments
      * @return Issue the loaded model
      * @throws CHttpException
      */
@@ -231,6 +233,7 @@ class IssueController extends Controller{
     /**
      * Performs the AJAX validation.
      * @param Issue $model the model to be validated
+     * @param string $id
      */
     protected function performAjaxValidation($model, $id = 'issue-form') {
         if (isset($_POST['ajax']) && $_POST['ajax'] === $id) {
@@ -241,8 +244,9 @@ class IssueController extends Controller{
 
     /**
      * Protected method to load the associated Project model class
-     * @param integer projectId the primary identifier of the associated Project
-     * @return object the Project data model based on the primary key
+     * @param integer $projectId the primary identifier of the associated Project
+     * @return Project data model based on the primary key
+     * @throws CHttpException
      */
     protected function loadProject($projectId) {
         //if the project property is null, create it based on input id
@@ -257,6 +261,8 @@ class IssueController extends Controller{
     /**
      * In-class defined filter method, configured for use in the above filters() method
      * It is called before the actionCreate() action method is run in order to ensure a proper project context
+     * @param CFilterChain $filterChain
+     * @throws CHttpException
      */
     public function filterProjectContext($filterChain) {
         //set the project identifier based on GET input request variables
@@ -272,7 +278,8 @@ class IssueController extends Controller{
 
     /**
      * Protected method to load the associated User model class to assign Project's Owning User
-     * @return object the User data model based on the primary key
+     * @return User data model based on the primary key
+     * @throws CHttpException
      */
     protected function loadUser() {
         //if the user property is null, create it based on input id
@@ -287,6 +294,7 @@ class IssueController extends Controller{
     /**
      * In-class defined filter method, configured for use in the above filters() method
      * It is called before the actionCreate() action method is run in order to ensure a proper user context
+     * @param CFilterChain $filterChain
      */
     public function filterUserContext($filterChain) {
         $this->loadUser();

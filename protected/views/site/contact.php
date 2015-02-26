@@ -96,9 +96,10 @@ $this->breadcrumbs = array(
 
 <?php endif; ?>
 
-<h2>CACHE COMPONENT:
+<hr><h2>CACHE COMPONENT:
     <?php
     if (!empty(Yii::app()->cache)) {
+        var_dump(get_class(Yii::app()->cache));
         var_dump(Yii::app()->cache->isInitialized);
     } else echo 'no cache';
     ?>

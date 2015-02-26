@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @var Issue               $model
+ * @var CActiveDataProvider $commentDataProvider
+ */
+
 if ($model->commentCount >= 1):
     if (Yii::app()->user->hasFlash('commentSubmitted')) {
         ?>
