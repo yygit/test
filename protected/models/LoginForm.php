@@ -74,18 +74,18 @@ class LoginForm extends CFormModel{
     /**
      * Gets the approprate timestamp depending on the column type $attribute is
      *
-     * @param CActiveRecord|string $arModel
+     * @param string $arModel
      * @param string $attribute
      * @param boolean $login
      * @return mixed timestamp (eg unix timestamp or a mysql function)
      */
-    private function setLastlogintime($login = false, $arModel = 'User', $attribute = 'last_login_time') {
-        if (!$login) return false;
+    private function setLastlogintime($login = FALSE, $arModel = 'User', $attribute = 'last_login_time') {
+        if (!$login) return FALSE;
         $model = $arModel::model()->findByPk($this->_identity->getId());
-        if (empty($model)) return false;
+        if (empty($model)) return FALSE;
         $columnType = $model->getTableSchema()->getColumn($attribute)->dbType;
         $model->$attribute = $this->getTimestampByColumnType($columnType);
-        Yii::app()->user->setState('lastLogin',date('r'));
+        Yii::app()->user->setState('lastLogin', date('r'));
         return $model->saveAttributes(array($attribute));
     }
 

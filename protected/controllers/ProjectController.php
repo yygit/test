@@ -25,7 +25,7 @@ class ProjectController extends Controller{
                     'COutputCache + view', // cache the entire output from the actionView() method for 2 minutes
                     'duration' => 120,
                     'varyByParam' => array('id', 'Issue_page', 'Issue_sort'), // YY; 20131217 this helps correct caching when sorting
-                    'varyByExpression' => 'Issue::model()->assignedUsers()->countByAttributes(array("project_id"=>$_GET["id"]))', // YY; 20131217 this helps pagination
+                    'varyByExpression' => 'ProjectUserAssignment::model()->countByAttributes(array("project_id" => (int)$_GET["id"])) + Issue::model()->assignedUsers()->countByAttributes(array("project_id" => (int)$_GET["id"]))', // YY; 20131217 adding issue count helps pagination 20150422 add assigned users count
                     'varyBySession' => true,
                 ),
             ),

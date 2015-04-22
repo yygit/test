@@ -17,7 +17,7 @@
  * @property Issue $issues
  * @property User $updateUser
  * @property User $createUser
- * @property User $users array of User models type AR
+ * @property User[] $users array of User models type AR
  * @method array() assignedUsers() defined in scopes()
  */
 class Project extends TrackStarAR{
@@ -114,8 +114,7 @@ class Project extends TrackStarAR{
      * @return array of valid users for this project, indexed by user IDs
      */
     public function getUserOptions() {
-        $usersArray = CHtml::listData($this->users, 'id', 'username');
-        return $usersArray;
+        return CHtml::listData($this->users, 'id', 'username');
     }
 
     public function behaviors() {

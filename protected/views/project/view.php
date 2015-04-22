@@ -1,6 +1,7 @@
 <?php
 /* @var $this ProjectController */
 /* @var $model Project */
+/* @var $issueDataProvider CActiveDataProvider */
 
 $this->breadcrumbs = array(
     'Projects' => array('index'),

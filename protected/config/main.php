@@ -59,7 +59,7 @@ return array(
         ),
         'user' => array(
             // enable cookie-based authentication ("remember me" feature)
-            'allowAutoLogin' => FALSE,
+            'allowAutoLogin' => TRUE,
         ),
         // uncomment the following to enable URLs in path-format
         'urlManager' => array(

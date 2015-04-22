@@ -2,6 +2,7 @@
 /* @var $this IssueController */
 /* @var $model Issue */
 /* @var $comment Comment */
+/* @var $commentDataProvider CActiveDataProvider */
 
 $this->breadcrumbs = array(
     'Issues' => array('index'),
@@ -89,7 +90,7 @@ $this->menu = array(
     </div>
     <br />
 
-    <h3 style="margin-bottom: 0px;">Leave a Comment</h3>
+    <h3 style="margin-bottom: 10px;">Leave a Comment</h3>
 
     <?php if (Yii::app()->user->hasFlash('commentSubmitted')): ?>
         <div class="flash-success">
