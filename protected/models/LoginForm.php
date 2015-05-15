@@ -84,8 +84,8 @@ class LoginForm extends CFormModel{
         $model = $arModel::model()->findByPk($this->_identity->getId());
         if (empty($model)) return FALSE;
         $columnType = $model->getTableSchema()->getColumn($attribute)->dbType;
+        Yii::app()->user->setState('lastLogin', $model->$attribute); // previous session login time
         $model->$attribute = $this->getTimestampByColumnType($columnType);
-        Yii::app()->user->setState('lastLogin', date('r'));
         return $model->saveAttributes(array($attribute));
     }
 
